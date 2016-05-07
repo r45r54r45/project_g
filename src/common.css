@@ -82,3 +82,6 @@ body{
     cursor: inherit;
     display: block;
 }
+.reply_info{
+  font-size: 13px;
+}

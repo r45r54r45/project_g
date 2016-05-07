@@ -164,18 +164,20 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">
-            <span class="pull-left"><span class="label label-primary">베플</span>
-            <span class="dropdown">
-              <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                닉네임
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">투표 p: 000</a></li>
-                <li><a href="#">레벨 p: 000</a></li>
-                <li><a href="#">리플: 30개</a></li>
-              </ul>
+            <span class="pull-left">
+              <span class="label label-primary">베플</span>
+              <span class="dropdown btn">
+                <span class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  닉네임
+                </span>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  <li><a href="#">투표 p: 000</a></li>
+                  <li><a href="#">레벨 p: 000</a></li>
+                  <li><a href="#">리플: 30개</a></li>
+                </ul>
+              </span>
+              <span class="reply_info">시간 지역</span>
             </span>
-            시간 지역 </span>
             <div class="clearfix"></div>
           </h3>
         </div>
@@ -183,7 +185,7 @@
           <p>ddd</p>
         </div>
         <div class="panel-footer reply-footer">
-          <span class="pull-left"><span class="label label-default" data-toggle="collapse" href="#rereply" aria-expanded="false" aria-controls="rereply">답글</span> 00</span>
+          <span class="pull-left"><button class="label label-default" data-toggle="collapse" href="#rereply" aria-expanded="false" aria-controls="rereply">답글</button> 00</span>
           <span class="pull-right">
             <i class="glyphicon glyphicon-thumbs-up"></i> 00
             <i class="glyphicon glyphicon-thumbs-down"></i>00
@@ -202,7 +204,7 @@
           </li>
           <li class="list-group-item">
             <!--  -->
-            <div class="pull-left">&#8735; <strong>김우현</strong>&nbsp<span>시간 지역</span>&nbsp<span class="label label-default"><i class="glyphicon glyphicon-pencil"></i>답글</span></div>
+            <div class="pull-left">&#8735; <strong>김우현</strong>&nbsp<span><span class="reply_info">시간 지역</span></span>&nbsp<span class="label label-default"><i class="glyphicon glyphicon-pencil"></i>답글</span></div>
             <div class="pull-right">  <i class="glyphicon glyphicon-thumbs-up"></i> 00
               <i class="glyphicon glyphicon-thumbs-down"></i>00</div>
               <div class="clearfix"></div>
