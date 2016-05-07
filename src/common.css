@@ -1,0 +1,84 @@
+body{
+  padding-top:50px;
+}
+.nav-gly{
+  position: absolute;
+  font-size: 10px;
+  top: 9px;
+  left: 9px;
+}
+.nav-dropdown-a{
+  padding: 10px !important;
+}
+.nav-hidden-xs{
+  margin-left: 20px !important;
+}
+.nav-i-wrapper{
+  width: 30px;
+  height: 30px;
+  position: relative;
+  border:1px solid white; border-radius:50%;
+}
+.easy-autocomplete.eac-square input{
+  min-width:159px !important;
+  border: 1px solid #D3D3D3 !important;
+  border-radius: 2px !important;
+  font-style: normal !important;
+}
+.easy-autocomplete-container{
+  width:157px !important;
+}
+.c_center{
+  text-align: center;
+}
+.c_gly{
+  margin-right:5px;
+}
+.reply-footer{
+  background-color:white;
+  border-top:none;
+}
+.c_alarm_list{
+  padding:3px 20px;
+  min-height:0px;
+  min-width: 200px;
+}
+.admin-row>.row{
+  /*padding-top: 50px;*/
+  padding-bottom:20px;
+}
+.panel-body>.alert{
+  margin-bottom: 0px;
+}
+.glyphicon-thumbs-down{
+  margin-left: 10px;
+}
+#alarm-badge{
+  top: -7px;
+  right: -10px;
+  font-size: 6px;
+  position: absolute;
+  background-color: red;
+}
+.ranking>th,.ranking>td{
+  text-align: center;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
