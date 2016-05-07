@@ -166,9 +166,9 @@
           <h3 class="panel-title">
             <span class="pull-left"><span class="label label-primary">베플</span>
             <span class="dropdown">
-              <span class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 닉네임
-              </span>
+              </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 <li><a href="#">투표 p: 000</a></li>
                 <li><a href="#">레벨 p: 000</a></li>
