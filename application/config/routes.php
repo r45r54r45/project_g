@@ -49,16 +49,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['help'] = 'welcome/help';
-$route['notice'] = 'welcome/notice';
-$route['join'] = 'welcome/join';
-$route['ranking'] = 'welcome/ranking_all';
-$route['ranking/field'] = 'welcome/ranking_sitemap';
-$route['ranking/(:any)'] = 'welcome/ranking_small/$1';
-$route['sitemap'] = 'welcome/sitemap';
-$route['admin'] = 'welcome/admin';
+$route['func/(:any)'] = 'func/$1';
+$route['help'] = 'views/help';
+$route['notice'] = 'views/notice';
+$route['join'] = 'views/join';
+$route['ranking'] = 'views/ranking_all';
+$route['ranking/field'] = 'views/ranking_sitemap';
+$route['ranking/(:any)'] = 'views/ranking_small/$1';
+$route['sitemap'] = 'views/sitemap';
+$route['admin'] = 'views/admin';
 $route['data/(:any)'] = 'data/$1';
-$route['(:any)/(:any)'] = 'welcome/person/$0/$1';
-$route['default_controller'] = 'welcome';
+$route['(:any)/(:any)'] = 'views/person/$0/$1';
+$route['default_controller'] = 'views';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

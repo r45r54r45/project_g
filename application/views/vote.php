@@ -84,19 +84,11 @@
     </div>
     <!-- 우측 사이드 -->
     <div class="col-sm-3 hidden-xs">
-      <div class="list-group">
+      <div class="list-group" ng-controller="notice">
         <!-- 공지 시작 -->
-        <a href="#" class="list-group-item">
-          <h4 class="list-group-item-heading">공지 제목</h4>
-          <p class="list-group-item-text">공지 내용</p>
-        </a>
-        <a href="#" class="list-group-item">
-          <h4 class="list-group-item-heading">List group item heading</h4>
-          <p class="list-group-item-text">...</p>
-        </a>
-        <a href="#" class="list-group-item">
-          <h4 class="list-group-item-heading">List group item heading</h4>
-          <p class="list-group-item-text">...</p>
+        <a href="/notice" class="list-group-item" ng-repeat="notice in notices">
+          <h4 class="list-group-item-heading">{{notice.TITLE}}</h4>
+          <p class="list-group-item-text">{{notice.BODY}}</p>
         </a>
       </div>
       <div class="list-group">

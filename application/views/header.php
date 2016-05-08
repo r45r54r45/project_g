@@ -24,14 +24,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script>
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" charset="utf-8">
   <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js" charset="utf-8"></script>
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <!-- Firebase -->
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-cookies.min.js"></script>
+  <script src="/src/app.js" charset="utf-8"></script>
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body>
-  <nav role="navigation" class="navbar navbar-default navbar-fixed-top" ng-controller="navbar">
+<body ng-app="app" >
+  <nav ng-controller="nav" role="navigation" class="navbar navbar-default navbar-fixed-top" ng-controller="navbar">
     <div class="container">
       <div class="navbar-header pull-left">
         <a href="/" class="navbar-brand">Repute</a>
@@ -46,25 +54,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </a>
             <ul class="dropdown-menu pull-right" style="padding: 10px 15px;">
-              <form>
+              <form id="login_form" method="post" action="/func/login_func">
                 <div class="form-group">
                   <label for="exampleInputEmail1">닉네임</label>
                   <div class="input-group">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" ng-model="id" name="id">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">비밀번호</label>
                   <div class="input-group">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" ng-model="pw" name="pw">
                   </div>
                 </div>
                 <div class="checkbox">
                   <label class="control-label">
-                    <input type="checkbox" value="">로그인 유지
+                    <input type="checkbox" ng-model="check" name="check">로그인 유지
                   </label>
                 </div>
-                <button type="submit" class="btn btn-default btn-block">로그인</button>
+                <button ng-click="ng_login()" type="button" class="btn btn-default btn-block">로그인</button>
                 <a href="/join" role="button" class="btn btn-default btn-block">회원가입</a>
               </form>
             </ul>
@@ -128,7 +136,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">투표</a>
             <ul class="dropdown-menu">
-              <li ng-repeat="categories in category"><a ng-href="{{categories.url}}">{{categories.name}}</a></li>
+              <li ng-repeat="categories in category"><a ng-href="{{categories.url}}">{{categories.NAME_KOR}}</a></li>
               <li role="separator" class="divider"></li>
               <li><a href="/sitemap">전체보기</a></li>
             </ul>
