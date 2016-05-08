@@ -3,9 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Data extends CI_Controller {
 	public function searchName(){
-		header('Content-Type: application/json');
-		$arr=["France","김우현","Germany","fff"];
-		echo json_encode($arr);
+		// header('Content-Type: application/json');
+		// $arr=["France","김우현","Germany","fff"];
+		// echo json_encode($arr);
 	}
 	public function get_big_subjects(){
 		$this->load->model('vote');
