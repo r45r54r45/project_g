@@ -18,6 +18,7 @@ app
     // $scope.id $scope.pw
   }
   $http.get("/data/get_vote_menu").then(function(res){
+    console.log(res.data);
     $scope.category=res.data;
   });
 })
@@ -127,6 +128,7 @@ app
 })
 .controller("vote",function($scope,$http,$firebaseObject,$cookieStore){
   var connectVoteInfo=function(){
+    console.log($scope.vote.leftPID);
     var ref = new Firebase("https://projectg2016.firebaseio.com/person");
     $scope.vote.left=$firebaseObject(ref.child($scope.vote.leftPID));
     $scope.vote.right=$firebaseObject(ref.child($scope.vote.rightPID));
