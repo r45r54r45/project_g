@@ -136,7 +136,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">투표</a>
             <ul class="dropdown-menu">
-              <li ng-repeat="categories in category"><a ng-href="{{categories.url}}">{{categories.NAME_KOR}}</a></li>
+              <li ng-repeat="categories in category"><a ng-href="/?ssid={{categories.SSID}}">{{categories.NAME_KOR}}</a></li>
               <li role="separator" class="divider"></li>
               <li><a href="/sitemap">전체보기</a></li>
             </ul>

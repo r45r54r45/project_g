@@ -4,8 +4,8 @@ app
   $scope.ng_login=function(){
     if($scope.id!=""&&$scope.pw!=""){
       $http.get("/func/login_data_func/"+$scope.id+"/"+$scope.pw).then(function(res){
-        console.log(res.data.UID);
         if(res.data.UID){
+          $cookieStore.put("uid",res.data.UID);
           if($scope.check==true){
             $cookieStore.put("auto_login",res.data.UID);
           }
@@ -111,10 +111,10 @@ app
         ordering:  false,
         "ajax": '/data/get_notice',
         "columns": [
-           { "data": "TITLE" },
-           { "data": "BODY" },
-           { "data": "TIME" }
-       ]
+          { "data": "TITLE" },
+          { "data": "BODY" },
+          { "data": "TIME" }
+        ]
       });
     });
   }
@@ -122,7 +122,83 @@ app
 })
 .controller("notice",function($scope,$http){
   $http.get("/data/get_notice").then(function(res){
-    console.log(res.data);
     $scope.notices=res.data.data;
   });
+})
+.controller("vote",function($scope,$http,$firebaseObject,$cookieStore){
+  var connectVoteInfo=function(){
+    var ref = new Firebase("https://projectg2016.firebaseio.com/person");
+    $scope.vote.left=$firebaseObject(ref.child($scope.vote.leftPID));
+    $scope.vote.right=$firebaseObject(ref.child($scope.vote.rightPID));
+  };
+  var reload=function(){
+    $http.get("/data/get_random_2/"+$scope.vote.ssid).then(function(res){
+      $scope.vote.left=res.data[0];
+      $scope.vote.leftPID=$scope.vote.left.PID;
+      $scope.vote.right=res.data[1];
+      $scope.vote.rightPID=$scope.vote.right.PID;
+      $("#leftIMG").removeClass('fadeOut').removeClass('pulse').addClass('zoomIn');
+      $("#rightIMG").removeClass('fadeOut').removeClass('pulse').addClass('zoomIn');
+      connectVoteInfo();
+      $scope.voteFlag=true;
+    });
+  };
+  $scope.init=function(){
+    $http.get("/data/get_ssid_info/"+$scope.vote.ssid).then(function(res){
+      $scope.vote.SSNAME=res.data.NAME_KOR;
+    });
+    $http.get("/data/get_random_ssid_all").then(function(res){
+      $http.get("/data/get_ssid_info/"+res.data.SSID).then(function(res){
+        $scope.otherSS=res.data;
+      });
+    });
+    connectVoteInfo();
+    var ref = new Firebase("https://projectg2016.firebaseio.com/totalVote");
+    $scope.vote.totalVote=$firebaseObject(ref);
+  }
+  $scope.select=function(pid,side){
+    if($scope.voteFlag==false)return;
+    //투표 통계
+    $scope.voteFlag=false;
+    var result={
+      "pid1": Math.min($scope.vote.leftPID,$scope.vote.rightPID),
+      "pid2": Math.max($scope.vote.leftPID,$scope.vote.rightPID),
+      "result": pid
+    };
+    $http.post("/data/get_result_stat",result).then(function(res){
+      res.data.show=true;
+      $scope.vote.vote_result=res.data;
+    });
+
+    //선택효과
+    if(side=='left'){
+      $("#leftIMG").removeClass('zoomIn').addClass('pulse');
+      $("#rightIMG").removeClass('zoomIn').addClass('fadeOut');
+    }
+    if(side=='right'){
+      $("#rightIMG").removeClass('zoomIn').addClass('pulse');
+      $("#leftIMG").removeClass('zoomIn').addClass('fadeOut');
+    }
+
+    //결과 전송
+    var result={
+      "uid": $cookieStore.get("uid"),
+      "lid": "12",
+      "ssid": $scope.vote.ssid,
+      "pid1": Math.min($scope.vote.leftPID,$scope.vote.rightPID),
+      "pid2": Math.max($scope.vote.leftPID,$scope.vote.rightPID),
+      "result": pid
+    };
+    $http.post("/func/add_vote_result",result);
+
+    //총투표수 증가
+    var ref = new Firebase("https://projectg2016.firebaseio.com/totalVote");
+    ref.transaction(function(vote) {
+      return vote+1;
+    });
+
+    //다음꺼 준비
+    setTimeout(reload,3000);
+  }
+
 });

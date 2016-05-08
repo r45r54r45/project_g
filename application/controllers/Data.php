@@ -29,4 +29,22 @@ class Data extends CI_Controller {
 		$result['data']=$this->gdata->get_notice();
 		echo json_encode($result);
 	}
+	public function get_random_2($ssid){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_random_2($ssid));
+	}
+	public function get_result_stat(){
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_result_stat($request));
+	}
+	public function get_ssid_info($ssid){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_ssid_info($ssid));
+	}
+	public function get_random_ssid_all(){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_random_ssid_all());
+	}
 }

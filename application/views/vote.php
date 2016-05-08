@@ -1,35 +1,31 @@
-<div class="container">
+<div class="container" >
   <div class="row" style="margin-top:30px;">
     <div class="col-sm-9 col-xs-12">
-      <div class="row" >
+      <div class="row" ng-controller="vote" ng-init="vote={};vote.ssid=<?=$ssid?>;vote.leftPID='<?=$left['PID']?>';vote.rightPID='<?=$right['PID']?>'; voteFlag=true; init()">
         <div class="col-xs-12" style="text-align:center;">
-          <span class="" style="font-size:30px;">KOREAN100 누적 투표수 000,000회</span>
+          <span class="" style="font-size:30px;">KOREAN100 누적 투표수 {{vote.totalVote.$value}}회</span>
         </div>
         <div class="col-xs-12" style="text-align:center; border:1px solid #D3D3D3; margin-top:10px;">
-          <span class="pull-left">투표 > 축구선수</span>
-          <span class="pull-right">000 에도 투표해주세요</span>
+          <span class="pull-left" >투표 > {{vote.SSNAME}}</span>
+          <span class="pull-right"><a ng-href="/?ssid={{otherSS.SSID}}">{{otherSS.NAME_KOR}}</a>에도 투표해주세요</span>
         </div>
-        <div class="col-xs-12 c_center" style="margin-top:10px;">
-          <span>000승 000패 82%가 당신의 결정과 같습니다.</span>
+        <div class="col-xs-12 c_center" style="margin-top:10px;margin-bottom:20px;">
+          <span ng-show="vote.vote_result.show">{{vote.vote_result.TOTAL}}명 중 {{vote.vote_result.SAME}}명, {{vote.vote_result.PERCENTAGE}}%가 당신의 결정과 같습니다.</span>
         </div>
-      </div>
-      <div class="row" style="margin-top:20px;">
         <div class="col-xs-5 c_center">
-          <img id="kk" src="http://www.khcanada.com/data/file/sportsnews/1369538022_pDLnl2dF_20130702022415_0.jpg" class="img img-thumbnail animated zoomIn">
-          <!-- vote1.image -->
+          <img id="leftIMG" ng-click="select(vote.leftPID,'left')" ng-src="{{vote.left.url}}" class="vote_img img img-thumbnail animated zoomIn">
           <div style="margin-top:10px;">
-            <span class="pull-left"><a ng-href="{{vote_1.url}}">{{vote_1.name}}</a></span>
-            <span class="pull-right"><i class="glyphicon glyphicon-heart c_gly"></i>{{vote_1.heart}} <i class="glyphicon glyphicon-remove c_gly"></i>{{vote_1.x}}</span>
+            <span class="pull-left"><a ng-href="{{vote.left.page}}">{{vote.left.name}}</a></span>
+            <span class="pull-right"><i class="glyphicon glyphicon-heart c_gly"></i>{{vote.left.heart}} <i class="glyphicon glyphicon-remove c_gly"></i>{{vote.left.x}}</span>
           </div>
         </div>
         <div class="col-xs-2 " style="text-align:center;    padding-top: 100px;
         font-size: 30px;">vs</div>
-        <div class="col-xs-5 c_center">
-          <img src="http://www.khcanada.com/data/file/sportsnews/1369538022_pDLnl2dF_20130702022415_0.jpg" class="img img-thumbnail  animated zoomIn">
-          <!-- vote2.image -->
+        <div class="col-xs-5 c_center" >
+          <img id="rightIMG" ng-click="select(vote.rightPID,'right')" ng-src="{{vote.right.url}}" class="vote_img img img-thumbnail  animated zoomIn">
           <div style="margin-top:10px;">
-            <span class="pull-left"><a ng-href="{{vote_2.url}}">{{vote_2.name}}</a></span>
-            <span class="pull-right"><i class="glyphicon glyphicon-heart c_gly"></i>{{vote_2.heart}} <i class="glyphicon glyphicon-remove c_gly"></i>{{vote_2.x}}</span>
+            <span class="pull-left"><a ng-href="{{vote_2.url}}">{{vote.right.name}}</a></span>
+            <span class="pull-right"><i class="glyphicon glyphicon-heart c_gly"></i>{{vote.right.heart}} <i class="glyphicon glyphicon-remove c_gly"></i>{{vote.right.x}}</span>
           </div>
         </div>
       </div>
@@ -45,8 +41,8 @@
             <div class="input-group-btn">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">선택 <span class="caret"></span></button>
               <ul class="dropdown-menu">
-                <li><a href="#">{{vote_1.name}}</a></li>
-                <li><a href="#">{{vote_2.name}}</a></li>
+                <li><a href="#"><?=$left['NAME']?></a></li>
+                <li><a href="#"><?=$right['NAME']?></a></li>
               </ul>
             </div><!-- /btn-group -->
             <span class="input-group-addon" id="selected_one">박지성</span>

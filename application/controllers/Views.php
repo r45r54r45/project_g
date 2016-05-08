@@ -4,14 +4,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Views extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		session_start();
+		$this->load->library('session');
 		$this->load->helper('url');
+		$this->load->helper('cookie');
 	}
 	public function index(){
-		echo $_SESSION['uid'];
+		// echo $this->session->userdata('uid');
+		// echo $this->session->userdata('name');
+		// set_cookie('c_test',1,0);
+		// echo get_cookie('c_test');
+		if($uid=$this->input->cookie('auto_login',TRUE)){
+			$this->session->set_userdata("uid",$uid);
+		}
+		$this->load->model('vote');
+		if(!isset($_GET['ssid'])){
+			$ssid=$this->vote->get_random_ssid()->SSID;
+		}else {
+			$ssid=$_GET['ssid'];
+		}
+		$data['ssid']=$ssid;
+		$randResult=$this->vote->get_random_2($ssid);
+		$data['left']=$randResult[0];
+		$data['right']=$randResult[1];
 		$this->load->view('header');
-		$this->load->view('vote');
-
+		$this->load->view('vote',$data);
 	}
 	public function join()
 	{

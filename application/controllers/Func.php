@@ -4,8 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Func extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		session_start();
+		$this->load->library('session');
 		$this->load->helper('url');
+		$this->load->helper('cookie');
 	}
 	public function join_func(){
 		$name=$this->input->post('name');
@@ -26,10 +27,10 @@ class Func extends CI_Controller {
 		echo json_encode($data);
 	}
 	public function login_func($UID){
-		$_SESSION['uid']=$UID;
+		$this->session->set_userdata("uid",$UID);
 		$this->load->model('user');
 		$data=$this->user->getUser($UID);
-		$this->session->name=$data->NAME;
+		$this->session->set_userdata("name",$data->NAME);
 		redirect('/');
 	}
 	public function add_big_subject($name){
@@ -52,6 +53,11 @@ class Func extends CI_Controller {
 		$this->load->model('gdata');
 		$this->gdata->add_notice($request);
 	}
-
+	public function add_vote_result(){
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$this->load->model('vote');
+		$this->vote->add_vote_result($request);
+	}
 
 }
