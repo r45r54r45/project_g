@@ -59,5 +59,8 @@ class Func extends CI_Controller {
 		$this->load->model('vote');
 		$this->vote->add_vote_result($request);
 	}
-
+	public function fume()
+	{
+		$this->load->view('capstone');
+	}
 }
