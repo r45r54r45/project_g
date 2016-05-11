@@ -75,5 +75,9 @@ class Views extends CI_Controller {
 		$this->load->view('header');
 		$this->load->view('ranking_sitemap');
 	}
+	public function fume()
+	{
+		$this->load->view('capstone');
+	}
 
 }
