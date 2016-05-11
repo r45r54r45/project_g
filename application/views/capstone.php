@@ -43,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	.modal-content{
 		height: 100%;
 		background-size: cover !important;
-		background-position-x: -35px !important;
+		background-position-x: 0 !important;
 	}
 	.modal-dialog{
 		width:90%;
