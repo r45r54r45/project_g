@@ -39,6 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	body{
 		background: #f1f1f2;
 		overflow-y: hidden;
+
 	}
 	.modal-content{
 		height: 100%;
@@ -68,10 +69,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		margin-right: 50px;
 		margin-top: 230px;
 	}
+
 	</style>
 
 	<script>
 	$(function(){
+    $("body").css("height",$(window).height());
 		$(".grad").css("height",$(".col-xs-3").width());
 		$(".grad").css("margin-top",($(window).height()-$(".grad").height())/3);
 		$(".c_button").css("margin-left",($(window).width()-500)/2);
