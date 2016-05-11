@@ -6,11 +6,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1. user-scalable = no">
 	<meta name="description" content="">
 	<meta name="author" content="">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name = "viewport" content = "initial-scale = 1, user-scalable = no">
 	<title>TEST</title>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
