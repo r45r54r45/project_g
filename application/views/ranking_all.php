@@ -1,4 +1,25 @@
-<div class="container">
+<style>
+.td1{
+  width:70px;
+}
+.td2{
+  width:70px;
+}
+.td3{
+  width:50px;
+}
+.td4{
+  width:70px;
+}
+.td5{
+  width:100px;
+}
+.td6{
+  width:90px;
+}
+
+</style>
+<div class="container" ng-controller="ranking_all">
   <div class="page-header">
     <h1>전체 순위</h1>
   </div>
@@ -11,27 +32,20 @@
           <th>사진</th>
           <th>이름</th>
           <th>승패 기록</th>
-          <th></th>
+          <th>총점</th>
         </thead>
         <tbody>
-          <tr>
-            <td>d</td>
-            <td>d</td>
-            <td style="width:20%;"><img src="http://www.khcanada.com/data/file/sportsnews/1369538022_pDLnl2dF_20130702022415_0.jpg" class="img img-thumbnail"></td>
-            <td>d</td>
-            <td>d</td>
-            <td>더보기</td>
+          <tr ng-click="gotoPerson(tuple.ss_eng,tuple.name)" ng-repeat="tuple in table">
+            <td class="td1">{{tuple.all_rank}}위</td>
+            <td class="td2" >{{tuple.ss_name}} {{tuple.ss_rank}}위</td>
+            <td class="td3"><img ng-src="{{tuple.url}}" class="img img-thumbnail"></td>
+            <td class="td4">{{tuple.name}}</td>
+            <td class="td5">{{tuple.realtime.win}}승 {{tuple.realtime.lose}}패</td>
+            <td class="td6">{{tuple.realtime.total}}점</td>
           </tr>
         </tbody>
       </table>
     </div>
-
-
   </div>
+
 </div>
-<script>
-$(document).ready(function(){
-  $('.ranking').DataTable({
-  });
-});
-</script>

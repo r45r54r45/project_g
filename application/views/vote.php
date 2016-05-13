@@ -1,7 +1,7 @@
 <div class="container" >
   <div class="row" style="margin-top:30px;">
-    <div class="col-sm-9 col-xs-12">
-      <div class="row" ng-controller="vote" ng-init="vote={};vote.ssid=<?=$ssid?>;vote.leftPID='<?=$left['PID']?>';vote.rightPID='<?=$right['PID']?>'; voteFlag=true; init()">
+    <div class="col-sm-9 col-xs-12" ng-controller="vote" ng-init="vote={};vote.ssid=<?=$ssid?>;vote.leftPID='<?=$left['PID']?>';vote.rightPID='<?=$right['PID']?>'; voteFlag=true; init()">
+      <div class="row" >
         <div class="col-xs-12" style="text-align:center;">
           <span class="" style="font-size:30px;">KOREAN100 누적 투표수 {{vote.totalVote.$value}}회</span>
         </div>
@@ -10,22 +10,55 @@
           <span class="pull-right"><a ng-href="/?ssid={{otherSS.SSID}}">{{otherSS.NAME_KOR}}</a>에도 투표해주세요</span>
         </div>
         <div class="col-xs-12 c_center" style="margin-top:10px;margin-bottom:20px;">
-          <span ng-show="vote.vote_result.show">{{vote.vote_result.TOTAL}}명 중 {{vote.vote_result.SAME}}명, {{vote.vote_result.PERCENTAGE}}%가 당신의 결정과 같습니다.</span>
+          <span ng-show="vote.vote_result.show">{{before.winner}} 승 {{before.loser}} 패, {{vote.vote_result.PERCENTAGE}}%가 당신의 결정과 같습니다.</span>
         </div>
         <div class="col-xs-5 c_center">
           <img id="leftIMG" ng-click="select(vote.leftPID,'left')" ng-src="{{vote.left.url}}" class="vote_img img img-thumbnail animated zoomIn">
           <div style="margin-top:10px;">
-            <span class="pull-left"><a ng-href="{{vote.left.page}}">{{vote.left.name}}</a></span>
-            <span class="pull-right"><i class="glyphicon glyphicon-heart c_gly"></i>{{vote.left.heart}} <i class="glyphicon glyphicon-remove c_gly"></i>{{vote.left.x}}</span>
+            <span class="pull-left"><a ng-href="/{{vote.SSNAME_ENG}}/{{vote.left.name}}">{{vote.left.name}}</a></span>
+            <span class="pull-right"><i ng-click="giveHeart(vote.leftPID)" class="glyphicon glyphicon-heart c_gly"></i>{{vote.left.heart}} <i ng-click="giveX(vote.leftPID)"  class="glyphicon glyphicon-remove c_gly"></i>{{vote.left.x}}</span>
           </div>
         </div>
+
         <div class="col-xs-2 " style="text-align:center;    padding-top: 100px;
         font-size: 30px;">vs</div>
         <div class="col-xs-5 c_center" >
           <img id="rightIMG" ng-click="select(vote.rightPID,'right')" ng-src="{{vote.right.url}}" class="vote_img img img-thumbnail  animated zoomIn">
           <div style="margin-top:10px;">
-            <span class="pull-left"><a ng-href="{{vote_2.url}}">{{vote.right.name}}</a></span>
-            <span class="pull-right"><i class="glyphicon glyphicon-heart c_gly"></i>{{vote.right.heart}} <i class="glyphicon glyphicon-remove c_gly"></i>{{vote.right.x}}</span>
+            <span class="pull-left"><a ng-href="/{{vote.SSNAME_ENG}}/{{vote.right.name}}">{{vote.right.name}}</a></span>
+            <span class="pull-right"><i ng-click="giveHeart(vote.rightPID)"  class="glyphicon glyphicon-heart c_gly"></i>{{vote.right.heart}} <i ng-click="giveX(vote.rightPID)"  class="glyphicon glyphicon-remove c_gly"></i>{{vote.right.x}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="heartModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" ng-init=heartModal={};>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="form-group">
+                <label>기부할 포인트 (보유 포인트:          {{heartModal.maxPoint}})</label>
+                <input ng-model="heartModal.point" type="number" class="form-control">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary" ng-click="sendHeart()">기부하기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="XModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" ng-init=XModal={};>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="form-group">
+                <label>기부할 포인트 (보유 포인트:          {{XModal.maxPoint}})</label>
+                <input ng-model="XModal.point" type="number" class="form-control">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary" ng-click="sendX()">기부하기</button>
+            </div>
           </div>
         </div>
       </div>
@@ -41,8 +74,8 @@
             <div class="input-group-btn">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">선택 <span class="caret"></span></button>
               <ul class="dropdown-menu">
-                <li><a href="#"><?=$left['NAME']?></a></li>
-                <li><a href="#"><?=$right['NAME']?></a></li>
+                <li><a href="#">{{vote.left.name}}</a></li>
+                <li><a href="#">{{vote.right.name}}</a></li>
               </ul>
             </div><!-- /btn-group -->
             <span class="input-group-addon" id="selected_one">박지성</span>

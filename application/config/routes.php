@@ -59,6 +59,7 @@ $route['ranking/(:any)'] = 'views/ranking_small/$1';
 $route['sitemap'] = 'views/sitemap';
 $route['admin'] = 'views/admin';
 $route['data/(:any)'] = 'data/$1';
+$route['data/(:any)/(:any)'] = 'data/$1/$2';
 $route['(:any)/(:any)'] = 'views/person/$0/$1';
 $route['default_controller'] = 'views';
 $route['404_override'] = '';

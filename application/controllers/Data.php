@@ -47,4 +47,30 @@ class Data extends CI_Controller {
 		$this->load->model('vote');
 		echo json_encode($this->vote->get_random_ssid_all());
 	}
+	public function get_all_rank($from){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_all_rank($from));
+	}
+	public function get_ss_rank($ss,$from){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_ss_rank($ss,$from));
+	}
+	public function add_to_total($pid,$amount){
+		$this->load->model('vote');
+		$this->vote->add_to_total($pid,$amount);
+	}
+	public function minus_to_total($pid,$amount){
+		$this->load->model('vote');
+		$this->vote->minus_to_total($pid,$amount);
+	}
+	public function give_donation(){
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$this->load->model('vote');
+		echo json_encode($this->vote->give_donation($request));
+	}
+	public function get_auth_profile($pid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_auth_profile($pid));
+	}
 }

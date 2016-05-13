@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" ng-controller="ss_sitemap">
   <div class="page-header">
     <h1>분야별 순위</h1>
   </div>
@@ -11,7 +11,7 @@
           <h3 class="panel-title">스포츠</h3>
         </div>
         <div class="list-group">
-          <a href="/ranking/축구선수" class="list-group-item">
+          <a href="/ranking/soccer" class="list-group-item">
             축구선수
           </a>
         </div>

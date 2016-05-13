@@ -51,8 +51,12 @@ class Views extends CI_Controller {
 	}
 	public function person($v1,$v2)
 	{
+		$this->load->model('gdata');
+		$PID_info=$this->gdata->get_PID_by_info($v1,urldecode($v2));
+		$data['pid']=$PID_info->pid;
+		$data['ssname']=$PID_info->ss_name_kor;
 		$this->load->view('header');
-		$this->load->view('person');
+		$this->load->view('person',$data);
 	}
 	public function sitemap()
 	{
@@ -66,7 +70,10 @@ class Views extends CI_Controller {
 	}
 	public function ranking_small($v1)
 	{
-		$data['target']=urldecode($v1);
+		$this->load->model('vote');
+		$SS= $this->vote->getSSByEng($v1);
+		$data['target']=$SS->NAME_KOR;
+		$data['ssid']=$SS->SSID;
 		$this->load->view('header');
 		$this->load->view('ranking_small',$data);
 	}

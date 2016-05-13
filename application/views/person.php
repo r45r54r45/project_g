@@ -1,4 +1,4 @@
-<div class="container" style="margin-top:20px;">
+<div class="container" style="margin-top:20px;" ng-controller="person" ng-init="pid=<?=$pid?>; init();">
   <div class="row">
     <div class="col-sm-3 col-xs-12">
       <img src="http://www.khcanada.com/data/file/sportsnews/1369538022_pDLnl2dF_20130702022415_0.jpg" class="img img-responsive img-thumbnail">
@@ -18,7 +18,7 @@
         <div class="col-xs-12 col-sm-6">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">축구선수 순위 (--기준)</h3>
+              <h3 class="panel-title"><?=$ssname?> 순위 (--기준)</h3>
             </div>
             <div class="panel-body">
               00등
@@ -114,8 +114,8 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <div class="jumbotron">
-        <h3>유저평 (by 닉네임) <span class="label label-warning" data-toggle="modal" data-target="#user_assess_edit">수정하기</span></h3>
+      <div class="jumbotron" ng-init="userAssess_auth=false;">
+        <h3>유저평 (by 닉네임) <span class="label label-warning" data-toggle="modal" data-target="#user_assess_edit" ng-show="userAssess_auth">수정하기</span></h3>
         <p>...</p>
       </div>
       <div class="modal fade" tabindex="-1" role="dialog" id="user_assess_edit">
