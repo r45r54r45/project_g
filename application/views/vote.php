@@ -122,14 +122,11 @@
       </div>
       <div class="list-group">
         <!-- 현재 소주제의 랭킹 1위 ~ 10위  -->
-        <a href="#" class="list-group-item">
-          <h4 class="list-group-item-heading"> 몇 위</h4>
+        <a href="/help" class="list-group-item">
+          <div class="btn btn-default btn-block">건의하기</div>
         </a>
         <a href="#" class="list-group-item">
-          <h4 class="list-group-item-heading"> 몇 위</h4>
-        </a>
-        <a href="#" class="list-group-item">
-          <h4 class="list-group-item-heading"> 몇 위</h4>
+          <h4 class="list-group-item-heading"> 배너 위치</h4>
         </a>
         <!-- ... -->
       </div>

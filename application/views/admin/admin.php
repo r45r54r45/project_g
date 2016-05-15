@@ -3,7 +3,6 @@
     <div class="col-xs-3">
       <div class="list-group" style="position: fixed; width: 23%; top: 70px;">
         <a href="#vote" class="list-group-item active">투표 관리</a>
-        <a href="#rating" class="list-group-item">순위 관리</a>
         <a href="#user" class="list-group-item">회원 관리</a>
         <a href="#reply" class="list-group-item">리플 보기</a>
         <a href="#notice" class="list-group-item">공지 관리</a>
@@ -155,7 +154,7 @@
     </div>
 
 
-    <div class="row" id="rating">
+    <!-- <div class="row" id="rating">
       <div class="col-xs-12">
         <blockquote>
           <strong>순위 관리</strong>
@@ -177,7 +176,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="row" id="user">
       <div class="col-xs-12">

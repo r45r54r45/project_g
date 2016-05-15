@@ -5,23 +5,17 @@ class User extends CI_Model{
     parent::__construct();
     $this->load->database();
   }
-  public function addUser($name,$password){
-    $data = array(
-      'NAME' => $name,
-      'PASSWORD' => $password
-    );
-    $this->db->trans_start();
-    $this->db->insert('USER', $data);
-    $result=$this->db->query('select * from USER order by UID desc limit 1');
-    $this->db->trans_complete();
-    return $result->row();
+  public function addUser($req){
+    @$loc=mysql_escape_string($req->loc);
+    $this->db->query("insert into USER (NAME,PASSWORD,AGE,SEX,LOC) values ('$req->name',$req->pw,'$req->age','$req->sex','$loc')");
+    return $this->db->query("select UID from USER order by UID desc limit 1")->row();
   }
   public function isUser($name){
-    $query=$this->db->query("select * from USER where NAME='$name'");
+    $query=$this->db->query("select * from USER where NAME='$name' and QUIT='0'");
     return $query->num_rows();
   }
   public function login($name,$password){
-    $query=$this->db->query("select * from USER where NAME='$name' and PASSWORD='$password'");
+    $query=$this->db->query("select * from USER where NAME='$name' and PASSWORD='$password' and QUIT='0'");
     return $query->row();
   }
   public function getUser($UID){

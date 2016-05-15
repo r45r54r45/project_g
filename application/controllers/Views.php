@@ -9,12 +9,11 @@ class Views extends CI_Controller {
 		$this->load->helper('cookie');
 	}
 	public function index(){
-		// echo $this->session->userdata('uid');
-		// echo $this->session->userdata('name');
-		// set_cookie('c_test',1,0);
-		// echo get_cookie('c_test');
 		if($uid=$this->input->cookie('auto_login',TRUE)){
-			$this->session->set_userdata("uid",$uid);
+			// echo "autologined";
+			$this->session->set_userdata("uid",str_replace( "\"","",$uid));
+		}else{
+			//no autologin
 		}
 		$this->load->model('vote');
 		if(!isset($_GET['ssid'])){

@@ -50,6 +50,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['func/(:any)'] = 'func/$1';
+$route['reply/(:any)'] = 'reply/$1';
+$route['reply/(:any)/(:any)'] = 'reply/$1/$2';
 $route['help'] = 'views/help';
 $route['notice'] = 'views/notice';
 $route['join'] = 'views/join';

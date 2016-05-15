@@ -55,6 +55,10 @@ class Data extends CI_Controller {
 		$this->load->model('vote');
 		echo json_encode($this->vote->get_ss_rank($ss,$from));
 	}
+	public function get_person_rank($pid){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_person_rank($pid));
+	}
 	public function add_to_total($pid,$amount){
 		$this->load->model('vote');
 		$this->vote->add_to_total($pid,$amount);
@@ -72,5 +76,33 @@ class Data extends CI_Controller {
 	public function get_auth_profile($pid){
 		$this->load->model('gdata');
 		echo json_encode($this->gdata->get_auth_profile($pid));
+	}
+	public function get_bs_byorder(){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_bs_byorder());
+	}
+	public function get_ss_byorder($bsid){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_ss_byorder($bsid));
+	}
+	public function get_stat_by_info(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_stat_by_info($req));
+	}
+	public function get_profile($pid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_profile($pid));
+	}
+	public function update_user_assess(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('gdata');
+		$this->gdata->update_user_assess($req);
+	}
+	public function get_user_info($uid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_user_info($uid));
 	}
 }

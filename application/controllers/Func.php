@@ -9,11 +9,10 @@ class Func extends CI_Controller {
 		$this->load->helper('cookie');
 	}
 	public function join_func(){
-		$name=$this->input->post('name');
-		$password=$this->input->post('pw');
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
 		$this->load->model('user');
-		$signed=$this->user->addUser($name,$password);
-		redirect('/');
+		echo json_encode($this->user->addUser($req));
 	}
 	public function name_check($name){
 		$this->load->model('user');

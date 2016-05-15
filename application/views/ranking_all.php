@@ -38,7 +38,7 @@
           <tr ng-click="gotoPerson(tuple.ss_eng,tuple.name)" ng-repeat="tuple in table">
             <td class="td1">{{tuple.all_rank}}위</td>
             <td class="td2" >{{tuple.ss_name}} {{tuple.ss_rank}}위</td>
-            <td class="td3"><img ng-src="{{tuple.url}}" class="img img-thumbnail"></td>
+            <td class="td3"><img ng-src="{{tuple.realtime.url}}" class="img img-thumbnail"></td>
             <td class="td4">{{tuple.name}}</td>
             <td class="td5">{{tuple.realtime.win}}승 {{tuple.realtime.lose}}패</td>
             <td class="td6">{{tuple.realtime.total}}점</td>
