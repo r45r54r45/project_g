@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'shareit2015.cafe24.com',
+	'hostname' => 'localhost',
 	'username' => 'shareit2015',
 	'password' => 'e34e43E34!',
 	'database' => 'shareit2015',
