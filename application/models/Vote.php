@@ -34,6 +34,9 @@ class Vote extends CI_Model{
   public function get_people($ssid){
     return $this->db->query("select PID,SSID,NAME,PROFILE from PERSON where SSID='$ssid'")->result();
   }
+  public function get_all_people_name(){
+    return $this->db->query("select p.NAME, ss.NAME_ENG from PERSON p join SMALL_SUBJECT ss on ss.SSID=p.SSID ")->result_array();
+  }
   public function add_person($req){
     return $this->db->query("insert into PERSON (SSID,NAME,URL,PROFILE) values ('$req->ssid','$req->name','$req->url_address','$req->profile')")->result();
   }
@@ -96,4 +99,5 @@ class Vote extends CI_Model{
   public function get_stat_by_info($req){
     return $this->db->query("select count(*) as win, (select count(*) from (select PID1,PID2,RESULT from VOTE_RESULT vr join USER u on vr.UID=u.UID where u.AGE like '%$req->age%' and u.SEX like '%$req->sex%' and u.LOC like '%$req->loc%' and vr.UID!='0') vr2 where (vr2.PID1='$req->pid' or vr2.PID2='$req->pid') and vr2.RESULT!='$req->pid') as lose from (select PID1, PID2, RESULT from VOTE_RESULT vr join USER u on vr.UID=u.UID where u.AGE like '%$req->age%' and u.SEX like '%$req->sex%' and u.LOC like '%$req->loc%' and vr.UID!='0') vr2 where (vr2.PID1='$req->pid' and vr2.RESULT='$req->pid') or (vr2.PID2='$req->pid' and  vr2.RESULT='$req->pid')")->row();
   }
+
 }

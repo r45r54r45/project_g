@@ -117,7 +117,7 @@
         <!-- 공지 시작 -->
         <a href="/notice" class="list-group-item" ng-repeat="notice in notices">
           <h4 class="list-group-item-heading">{{notice.TITLE}}</h4>
-          <p class="list-group-item-text">{{notice.BODY}}</p>
+          <p class="list-group-item-text" ng-bind-html="notice.BODY"></p>
         </a>
       </div>
       <div class="list-group">

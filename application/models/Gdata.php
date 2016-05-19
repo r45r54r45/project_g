@@ -26,5 +26,14 @@ class Gdata extends CI_Model{
   public function get_user_info($uid){
     return $this->db->query("select NAME, TIME from USER where UID='$uid'")->row();
   }
+  public function get_reply_count($uid){
+    return $this->db->query("select count(*) as count from REPLY where UID='$uid'")->row();
+  }
+  public function get_user_by_rid($rid){
+    return $this->db->query("select * from REPLY where RID='$rid'")->row();
+  }
+  public function get_person_info($pid){
+    return $this->db->query("select p.NAME as name, ss.NAME_ENG as small_subject from PERSON p join SMALL_SUBJECT ss on p.SSID=ss.SSID where p.PID='$pid'")->row();
+  }
 
   }

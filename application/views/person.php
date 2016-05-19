@@ -216,7 +216,7 @@
   </div>
 </div>
 <!-- 투표페이지의 리플모음 -->
-<div class="row" style="margin-top:0px;">
+<div class="row" style="margin-top:0px;" id="reply_start">
   <div class="col-xs-12">
     <div class="page-header" style="margin: 20px 0 20px;">
       <strong>리플</strong>
@@ -225,7 +225,7 @@
   <div class="col-xs-12">
     <div class="input-group">
       <span class="input-group-addon">리플</span>
-      <input type="text" class="form-control" aria-label="..." ng-model="reply_data">
+      <input type="text" class="form-control" aria-label="..." ng-model="reply_data" ng-keydown="keydown($event)">
       <span class="input-group-btn">
         <button ng-click="uploadReply()" class="btn btn-default" type="button">등록</button>
       </span>
@@ -240,16 +240,16 @@
           <span class="pull-left">
             <span class="label label-primary">베플</span>
             <span class="dropdown btn">
-              <span class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                {{reply.NAME}}
+              <span class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-click="loadUserInfo(reply.data.rid,reply.data.uid)">
+                <strong>{{reply.data.name}}</strong>
               </span>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">투표 p: 000</a></li>
-                <li><a href="#">레벨 p: 000</a></li>
-                <li><a href="#">리플: 30개</a></li>
+                <li><a href="">투표 p: {{userInfo[reply.data.rid].vote|number:0}}</a></li>
+                <li><a href="">레벨 p: {{userInfo[reply.data.rid].level|number:0}}</a></li>
+                <li><a href="">리플: {{userInfo[reply.data.rid].reply_count}}개</a></li>
               </ul>
             </span>
-            <span class="reply_info">{{reply.time}}</span>
+            <span class="reply_info">{{reply.data.time| date:'yyyy년 MM월 dd일 HH시 mm분 ss초'}}</span>
           </span>
           <div class="clearfix"></div>
         </h3>
@@ -258,56 +258,55 @@
         <p>{{reply.data.data}}</p>
       </div>
       <div class="panel-footer reply-footer">
-        <span class="pull-left"><button class="label label-default" data-toggle="collapse" ng-href="#rereply_{{reply.RID}}" aria-expanded="false" aria-controls="rereply">답글</button> 00</span>
+        <span class="pull-left"><button class="label label-default" data-toggle="collapse" ng-href="#best_rereply_{{reply.RID}}" aria-expanded="false" aria-controls="rereply" ng-click="show_child_reply(reply.RID);">답글</button> {{reply.data.child_reply_count}}</span>
         <span class="pull-right">
           <i ng-click="boomUpDown(reply.RID,'up',reply.UID)"  class="glyphicon glyphicon-thumbs-up"></i> {{reply.data.up}}
           <i ng-click="boomUpDown(reply.RID,'down',reply.UID)" class="glyphicon glyphicon-thumbs-down"></i>{{reply.data.down}}
         </span>
         <div class="clearfix"></div>
       </div>
-      <ul class="list-group collapse" id="rereply_{{reply.RID}}">
+      <ul class="list-group collapse" id="best_rereply_{{reply.RID}}">
         <li class="list-group-item">
           <div class="input-group">
-            <span class="input-group-addon">답글</span>
-            <input type="text" class="form-control" aria-label="...">
+            <span class="input-group-addon" >답글</span>
+            <input type="text" class="form-control" aria-label="..." id="child_reply_{{reply.RID}}"  ng-model="child_reply[reply.RID]">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button">등록</button>
+              <button class="btn btn-default" type="button" ng-click="add_child_reply(reply.RID)">등록</button>
             </span>
           </div><!-- /input-group -->
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-repeat="child_reply in  child_replies[reply.RID]">
           <!--  -->
-          <div class="pull-left">&#8735; <strong>김우현</strong>&nbsp<span><span class="reply_info">시간 지역</span></span>&nbsp<span class="label label-default"><i class="glyphicon glyphicon-pencil"></i>답글</span></div>
-          <div class="pull-right">  <i class="glyphicon glyphicon-thumbs-up"></i> 00
-            <i class="glyphicon glyphicon-thumbs-down"></i>00</div>
+          <div class="pull-left">&#8735; <strong>{{child_reply.name}}</strong>&nbsp<span><span class="reply_info">{{ child_reply.time| date:'yyyy년 MM월 dd일 HH시 mm분 ss초'}}</span></span>&nbsp<span ng-click="rerereply(child_reply.prid,child_reply.name)" class="label label-default"><i class="glyphicon glyphicon-pencil"></i>답글</span></div>
+          <div class="pull-right">  <i class="glyphicon glyphicon-thumbs-up" ng-click="child_boomUpDown(child_reply.rid,child_reply.prid,'up',child_reply.uid)"></i> {{child_reply.up}}
+            <i class="glyphicon glyphicon-thumbs-down" ng-click="child_boomUpDown(child_reply.rid,child_reply.prid,'down',child_reply.uid)"></i>{{child_reply.down}}</div>
             <div class="clearfix"></div>
-            <div class="pull-left" style="padding-left: 17px;">내용내용</div>
+            <div class="pull-left" style="padding-left: 17px;">{{child_reply.data}}</div>
             <div class="clearfix"></div>
           </li>
-
-          <li class="list-group-item">
-            <nav>
-              <ul class="pagination pagination-sm" style="margin:0;">
-                <!-- <li>
-                <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li> -->
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-              <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+          <!-- <li class="list-group-item">
+          <nav>
+          <ul class="pagination pagination-sm" style="margin:0;">
+          <li>
+          <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
       </li>
-    </ul>
-  </div>
+      <li class="active"><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li>
+      <a href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+</ul>
+</nav>
+</li> -->
+</ul>
+</div>
 </div>
 </div>
 
@@ -318,17 +317,17 @@
       <div class="panel-heading" style="padding:0 15px">
         <h3 class="panel-title">
           <span class="pull-left">
-            <span class="dropdown btn">
-              <span class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                {{reply.NAME}}
+            <span class="dropdown btn" style="    padding: 6px 12px 6px 0px;">
+              <span class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-click="loadUserInfo(reply.rid,reply.uid)">
+                <strong>{{reply.name}}</strong>
               </span>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">투표 p: 000</a></li>
-                <li><a href="#">레벨 p: 000</a></li>
-                <li><a href="#">리플: 30개</a></li>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" >
+                <li><a href="">투표 p: {{userInfo[reply.rid].vote|number:0}}</a></li>
+                <li><a href="">레벨 p: {{userInfo[reply.rid].level|number:0}}</a></li>
+                <li><a href="">리플: {{userInfo[reply.rid].reply_count}}개</a></li>
               </ul>
             </span>
-            <span class="reply_info">{{reply.time}}</span>
+            <span class="reply_info">{{reply.time| date:'yyyy년 MM월 dd일 HH시 mm분 ss초'}}</span>
           </span>
           <div class="clearfix"></div>
         </h3>
@@ -337,56 +336,56 @@
         <p>{{reply.data}}</p>
       </div>
       <div class="panel-footer reply-footer">
-        <span class="pull-left"><button class="label label-default" data-toggle="collapse" ng-href="#rereply_{{reply.RID}}" aria-expanded="false" aria-controls="rereply">답글</button> 00</span>
+        <span class="pull-left"><button class="label label-default" data-toggle="collapse" ng-href="#rereply_{{reply.rid}}" aria-expanded="false" aria-controls="rereply" ng-click="show_child_reply(reply.rid);">답글</button> {{reply.child_reply_count}}</span>
         <span class="pull-right">
           <i ng-click="boomUpDown(reply.rid,'up',reply.uid)"  class="glyphicon glyphicon-thumbs-up"></i> {{reply.up}}
           <i ng-click="boomUpDown(reply.rid,'down',reply.uid)" class="glyphicon glyphicon-thumbs-down"></i>{{reply.down}}
         </span>
         <div class="clearfix"></div>
       </div>
-      <ul class="list-group collapse" id="rereply_{{reply.RID}}">
+      <ul class="list-group collapse" id="rereply_{{reply.rid}}">
         <li class="list-group-item">
           <div class="input-group">
             <span class="input-group-addon">답글</span>
-            <input type="text" class="form-control" aria-label="...">
+            <input type="text" class="form-control" aria-label="..." id="child_reply_{{reply.rid}}" ng-model="child_reply[reply.rid]"
+            ng-keydown="childKeydown($event,reply.rid)">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button">등록</button>
+              <button class="btn btn-default" type="button" ng-click="add_child_reply(reply.rid)">등록</button>
             </span>
           </div><!-- /input-group -->
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-repeat="child_reply in  child_replies[reply.rid]">
           <!--  -->
-          <div class="pull-left">&#8735; <strong>김우현</strong>&nbsp<span><span class="reply_info">시간 지역</span></span>&nbsp<span class="label label-default"><i class="glyphicon glyphicon-pencil"></i>답글</span></div>
-          <div class="pull-right">  <i class="glyphicon glyphicon-thumbs-up"></i> 00
-            <i class="glyphicon glyphicon-thumbs-down"></i>00</div>
+          <div class="pull-left">&#8735; <strong>{{child_reply.name}}</strong>&nbsp<span><span class="reply_info">{{child_reply.time| date:'yyyy년 MM월 dd일 HH시 mm분 ss초'}}</span></span>&nbsp<span class="label label-default" ng-click="rerereply(child_reply.prid,child_reply.name)"><i class="glyphicon glyphicon-pencil"></i>답글</span></div>
+          <div class="pull-right">  <i class="glyphicon glyphicon-thumbs-up" ng-click="child_boomUpDown(child_reply.rid,child_reply.prid,'up',child_reply.uid)"></i> {{child_reply.up}}
+            <i class="glyphicon glyphicon-thumbs-down" ng-click="child_boomUpDown(child_reply.rid,child_reply.prid,'down',child_reply.uid)"></i>{{child_reply.down}}</div>
             <div class="clearfix"></div>
-            <div class="pull-left" style="padding-left: 17px;">내용내용</div>
+            <div class="pull-left" style="padding-left: 17px;">{{child_reply.data}}</div>
             <div class="clearfix"></div>
           </li>
-
-          <li class="list-group-item">
-            <nav>
-              <ul class="pagination pagination-sm" style="margin:0;">
-                <!-- <li>
-                <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li> -->
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-              <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+          <!-- <li class="list-group-item">
+          <nav>
+          <ul class="pagination pagination-sm" style="margin:0;">
+          <li>
+          <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
       </li>
-    </ul>
-  </div>
+      <li class="active"><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li>
+      <a href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+</ul>
+</nav>
+</li> -->
+</ul>
+</div>
 </div>
 </div>
 

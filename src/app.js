@@ -1,4 +1,4 @@
-var app = angular.module("app", ["firebase","ngCookies"]);
+var app = angular.module("app", ["firebase","ngCookies","ngSanitize"]);
 app
 .service('levelService',function(){
   this.findLevel=function(level_point){
@@ -7,7 +7,6 @@ app
     var level=dist.findIndex(function(num){
       return num>level_point;
     });
-
     return level;
   }
   this.findDN=function(level){
@@ -20,7 +19,8 @@ app
     }
   }
 })
-.controller("nav",function($scope, $firebaseObject,$http,$cookies,$rootScope,levelService){
+.controller("nav",function($scope, $firebaseObject,$firebaseArray,$http,$cookies,$rootScope,levelService){
+
   $scope.init=function(){
     console.log("logined: "+$scope.uid);
     if($scope.uid!=''){
@@ -34,35 +34,115 @@ app
       $scope.user.$loaded().then(function(data){
         $scope.user.level=levelService.findLevel(data.level_point);
       });
-    }else{
-      // $scope.user.level="00";
-    }
-  }
 
-
-  $scope.ng_login=function(){
-    if($scope.id!=""&&$scope.pw!=""){
-      $http.get("/func/login_data_func/"+$scope.id+"/"+$scope.pw).then(function(res){
-        if(res.data.UID){
-          $cookies.put("uid",res.data.UID);
-          if($scope.check==true){
-            $cookies.put("auto_login",res.data.UID,{expires: new Date('Sun May 01 2033 20:04:09 GMT+0900')});
+      //alarm 부분
+      var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid')).child("alert");
+      $scope.alarm=$firebaseArray(ref.orderByChild('read').equalTo(false));
+      $scope.alarm.$loaded(function(res){
+        $scope.alarm.sort(function (a, b) {
+          if (a.$priority < b.$priority) {
+            return 1;
           }
-          location.href="/func/login_func/"+res.data.UID;
-        }else{
-          alert("닉네임과 비밀번호를 확인해주세요");
+          if (a.$priority > b.$priority) {
+            return -1;
+          }
+          return 0;
+        });
+        $scope.alarmArr=[];
+        for(var i=0; i<$scope.alarm.length; i++){
+          $http.get("/data/get_user_info_with_index/"+$scope.alarm[i].uid+"/"+i).then(function(res){
+            $scope.alarmArr[res.data.index]=res.data.NAME;
+          });
+        }
+
+      });
+      $scope.alarm.$watch(function(){
+        $scope.alarm.sort(function (a, b) {
+          if (a.$priority < b.$priority) {
+            return 1;
+          }
+          if (a.$priority > b.$priority) {
+            return -1;
+          }
+          return 0;
+        });
+        $scope.alarmArr=[];
+        for(var i=0; i<$scope.alarm.length; i++){
+          $http.get("/data/get_user_info_with_index/"+$scope.alarm[i].uid+"/"+i).then(function(res){
+            $scope.alarmArr[res.data.index]=res.data.NAME;
+          });
         }
       });
-    }
-    // $scope.id $scope.pw
+      $scope.deleteAlarm=function(idx){
+        var target=$scope.alarm[idx];
+        var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid')).child("alert").child(target.$id).child("read").transaction(function(data){
+          return !data;
+        });
+      }
+      $scope.clickAlarm=function(ala,idx){
+        $scope.deleteAlarm(idx);
+        location.href="/reply/alarm?pid="+ala.pid+"&rid="+ala.rid+"#reply_start";
+      }
+      $scope.hint=[];
+      $http.get("/data/get_all_people_name").then(function(res){
+        $scope.hintArr=res.data;
+        for(var i in $scope.hintArr){
+          $scope.hint.push($scope.hintArr[i].NAME);
+        }
+
+        $('#test').autocomplete({
+          source: $scope.hint,
+          select: function (event, ui) {
+            //아이템 선택시 처리 코드
+            var result=$.grep($scope.hintArr, function(e){ return e.NAME == ui.item.value; });
+            if (result.length == 0) {
+              // not found
+            } else if (result.length == 1) {                  location.href="/"+result[0].NAME_ENG+"/"+result[0].NAME;
+          } else {
+            // multiple items found
+          }
+        },
+        selectFirst: true,
+        minLength: 1,
+        open: function () {
+          $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+          $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+      });
+
+
+    });
+  }else{
+    // $scope.user.level="00";
   }
-  $http.get("/data/get_vote_menu").then(function(res){
-    $scope.category=res.data;
-  });
-  $scope.getOut=function(){
-    //TODO 탈퇴기능
-    confirm("탈퇴하시면 포인트가 모두 삭제됩니다. 그래도 탈퇴하시겠습니까?");
+}
+
+
+$scope.ng_login=function(){
+  if($scope.id!=""&&$scope.pw!=""){
+    $http.get("/func/login_data_func/"+$scope.id+"/"+$scope.pw).then(function(res){
+      if(res.data.UID){
+        $cookies.put("uid",res.data.UID);
+        if($scope.check==true){
+          $cookies.put("auto_login",res.data.UID,{expires: new Date('Sun May 01 2033 20:04:09 GMT+0900')});
+        }
+        location.href="/func/login_func/"+res.data.UID;
+      }else{
+        alert("닉네임과 비밀번호를 확인해주세요");
+      }
+    });
   }
+  // $scope.id $scope.pw
+}
+$http.get("/data/get_vote_menu").then(function(res){
+  $scope.category=res.data;
+});
+$scope.getOut=function(){
+  //TODO 탈퇴기능
+  confirm("탈퇴하시면 포인트가 모두 삭제됩니다. 그래도 탈퇴하시겠습니까?");
+}
 })
 .controller("join",function($scope, $http){
   $scope.name_check=function(){
@@ -83,7 +163,7 @@ app
         var data=JSON.stringify($scope.join);
         console.log(data);
         $http.post("/func/join_func",data).then(function(res){
-          console.log(res.data);
+          // console.log(res.data);
           var uid=res.data.UID;
           var ref = new Firebase("https://projectg2016.firebaseio.com/user");
           ref.child(uid).set({
@@ -523,7 +603,7 @@ app
       $scope.replies=$firebaseArray(ref.orderByPriority().limitToFirst(num));
       $scope.replies.$loaded(function(res){
         $scope.prevReplyNum=parseInt(res[res.length-1].$priority);
-        console.log($scope.prevReplyNum);
+        // console.log($scope.prevReplyNum);
       });
     }else{
       var tempArr=$firebaseArray(ref.orderByPriority().startAt(from).limitToFirst(num));
@@ -584,7 +664,6 @@ app
     $http.get("/reply/getBest/"+$scope.pid).then(function(res){
       $scope.bestReplies=res.data;
       var ref = new Firebase("https://projectg2016.firebaseio.com/reply");
-
       for(var i=0; i<res.data.length; i++){
         $scope.bestReplies[i].data=$firebaseObject(ref.child($scope.pid).child(res.data[i].RID));
       }
@@ -810,6 +889,9 @@ app
         'rid':data.RID,
         'prid':data.PRID,
         'uid': $cookies.get('uid'),
+        'time':new Date().getTime(),
+        'child_reply_count':0,
+        'name': data.NAME
       },-1*parseInt(data.RID));
       $scope.reply_data="";
       var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid'));
@@ -883,7 +965,150 @@ app
       }
     });
   }
+  $scope.child_reply=[];
+  $scope.add_child_reply=function(prid){
+    // console.log($scope.child_reply[prid]);
+    var data={
+      pid: $scope.pid,
+      prid: prid,
+      uid: $cookies.get("uid")
+    };
+    $http.post("/reply/add_child_reply",data).then(function(res){
+      var ref = new Firebase("https://projectg2016.firebaseio.com/child_reply").child(res.data.PRID);
+      ref.child(res.data.RID).setWithPriority({
+        'data': $scope.child_reply[prid],
+        'up':0,
+        'down':0,
+        'rid':res.data.RID,
+        'prid':res.data.PRID,
+        'uid': $cookies.get('uid'),
+        'time':new Date().getTime(),
+        'name': res.data.NAME
+      },-1*parseInt(res.data.RID));
+      new Firebase("https://projectg2016.firebaseio.com/reply").child($scope.pid).child(res.data.PRID).child('child_reply_count').transaction(function(count){
+        return count+1;
+      });
 
+      var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid'));
+      ref.child("level_point").transaction(function(point){
+        return point+1;
+      });
+      //TODO 댓글의 주인에게 알람 주기
+      $http.get("/data/get_user_by_rid/"+res.data.PRID).then(function(resq){
+        var data={
+          rid: resq.data.RID,
+          pid: resq.data.PID,
+          data: $scope.child_reply[prid],
+          uid: $cookies.get("uid"),
+          read: false,
+          '.priority': new Date().getTime()
+        };
+        var ref = new Firebase("https://projectg2016.firebaseio.com/user");
+        ref.child(resq.data.UID).child("alert").push(data);
+        $scope.child_reply[prid]="";
+      });
+    });
+  }
+  $scope.child_replies=[];
+  $scope.show_child_reply=function(prid){
+    //TODO 열려져 있는 상황이면 연결 끊어주는거 필요
+    //HACK 일단은 안함.
+    // if()
+    var ref = new Firebase("https://projectg2016.firebaseio.com/child_reply").child(prid);
+    $scope.child_replies[prid]=$firebaseArray(ref.orderByPriority());
+  }
+  $scope.child_boomUpDown=function(rid,prid,side,uid){
+    //이 rid에 대해 내가 붐업다운 한적이 있는지 확인
+    var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid'));
+    ref.child("boomUpDown").once("value",function(ss){
+      if(ss.child(rid).exists()){
+        alert('이미 추천/비추천을 하셨습니다');
+        return;
+      }else{
+        //기록에 없을 때
+
+        //자기 레벨 포인트 0.1점 추가
+        new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid')).child("level_point").transaction(function(count){
+          return count+0.1;
+        });
+
+        var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid')).child("level_point").once("value",function(res){
+          //레벨 포인트로 얼마나 추천할건지
+          var level=levelService.findLevel(res.val());
+          var DN=levelService.findDN(level);
+          var ref = new Firebase("https://projectg2016.firebaseio.com/child_reply").child(prid).child(rid);
+          if(side=="up"){
+            ref.child("up").transaction(function(cnt){
+              return cnt+DN;
+            });
+            new Firebase("https://projectg2016.firebaseio.com/user").child(uid).child('level_point').transaction(function(point){
+              return point+1;
+            });
+            var data={
+              rid:rid,
+              up:1,
+              down:0
+            };
+            $http.post("/reply/boomUpDown",JSON.stringify(data));
+          }else{
+            ref.child("down").transaction(function(cnt){
+              return cnt+DN;
+            });
+            new Firebase("https://projectg2016.firebaseio.com/user").child(uid).child('level_point').transaction(function(point){
+              if(point-1>=0){
+                return point-1;
+              }else{
+                return point;
+              }
+            });
+            var data={
+              rid:rid,
+              up:0,
+              down:1
+            };
+            $http.post("/reply/boomUpDown",JSON.stringify(data));
+          }
+          var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid'));
+          ref.child("boomUpDown").child(rid).set({
+            true:''
+          });
+
+
+        });
+
+
+      }
+    });
+  }
+  $scope.rerereply=function(prid,name){
+    $scope.child_reply[prid]=name+" | ";
+    $("#child_reply_"+prid).focus();
+  }
+  $scope.keydown=function(event){
+    if(event.keyCode==13){
+      $scope.uploadReply();
+    }
+  }
+  $scope.childKeydown=function(event,rid){
+    if(event.keyCode==13){
+      $scope.add_child_reply(rid);
+    }
+  }
+  $scope.userInfo=[];
+  $scope.loadUserInfo=function(rid,uid){
+    console.log(rid+" "+uid);
+    $scope.userInfo[rid]={};
+    var user=$scope.userInfo[rid];
+    var ref = new Firebase("https://projectg2016.firebaseio.com/user").child(uid).once("value",function(ss){
+      user.vote=ss.child("level_point").val();
+      user.level=ss.child("vote_point").val();
+      user.reply_count="로딩중... ";
+      $http.get("/data/get_reply_count/"+uid).then(function(res){
+        user.reply_count=res.data.count;
+        console.log();
+      });
+    });
+  }
 
 
 
@@ -892,4 +1117,5 @@ app
 
 
 })
+
 ;

@@ -23,6 +23,10 @@ class Data extends CI_Controller {
 		$this->load->model('vote');
 		echo json_encode($this->vote->get_people($ssid));
 	}
+	public function get_all_people_name(){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_all_people_name());
+	}
 	public function get_notice(){
 		$this->load->model('gdata');
 		header('Content-Type: application/json');
@@ -104,5 +108,19 @@ class Data extends CI_Controller {
 	public function get_user_info($uid){
 		$this->load->model('gdata');
 		echo json_encode($this->gdata->get_user_info($uid));
+	}
+	public function get_user_info_with_index($uid,$idx){
+		$this->load->model('gdata');
+		$result=$this->gdata->get_user_info($uid);
+		$result->index=$idx;
+		echo json_encode($result);
+	}
+	public function get_reply_count($uid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_reply_count($uid));
+	}
+	public function get_user_by_rid($rid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_user_by_rid($rid));
 	}
 }

@@ -8,8 +8,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">{{notice.TITLE}} ({{notice.TIME}})</h3>
         </div>
-        <div class="panel-body">
-          {{notice.BODY}}
+        <div class="panel-body" ng-bind-html="notice.BODY">
         </div>
       </div>
     </div>

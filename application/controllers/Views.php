@@ -43,6 +43,10 @@ class Views extends CI_Controller {
 		$this->load->view('header');
 		$this->load->view('help');
 	}
+	public function help_write(){
+		$this->load->view('header');
+		$this->load->view('help_write');
+	}
 	public function admin()
 	{
 		$this->load->view('header');

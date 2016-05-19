@@ -6,7 +6,6 @@
         <a href="#user" class="list-group-item">회원 관리</a>
         <a href="#reply" class="list-group-item">리플 보기</a>
         <a href="#notice" class="list-group-item">공지 관리</a>
-        <a href="#help" class="list-group-item">건의 관리</a>
       </div>
     </div>
     <div class="col-xs-9 admin-row" ng-cloak>
@@ -311,42 +310,7 @@
       </div>
     </div>
 
-    <div class="row" id="help">
-      <div class="col-xs-12">
-        <blockquote>
-          <strong>건의 관리</strong>
-        </blockquote>
-      </div>
-      <div class="col-xs-12">
-        <div class="well">
-          <table class="table help_table">
-            <thead>
-              <tr>
-                <th>제목</th>
-                <th>내용</th>
-                <th>시간</th>
-                <th>삭제</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>공지1</td>
-                <td>공지1 내용</td>
-                <td>어제</td>
-                <td>삭제</td>
-              </tr>
-            </tbody>
-          </table>
-          <script>
-          $(document).ready(function(){
-            $('.help_table').DataTable({
-              ordering:  false
-            });
-          });
-          </script>
-        </div>
-      </div>
-    </div>
+    
 
   </div>
 </div>
