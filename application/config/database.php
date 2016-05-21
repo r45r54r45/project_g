@@ -72,7 +72,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $active_group = 'default';
 $query_builder = TRUE;
-// shareit2015.cafe24.com
+//shareit2015.cafe24.com
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',

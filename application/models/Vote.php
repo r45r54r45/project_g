@@ -34,17 +34,21 @@ class Vote extends CI_Model{
   public function get_people($ssid){
     return $this->db->query("select PID,SSID,NAME,PROFILE from PERSON where SSID='$ssid'")->result();
   }
+  public function get_people_pid($ssid){
+    return $this->db->query("select PID as pid from PERSON where SSID='$ssid'")->result();
+  }
   public function get_all_people_name(){
     return $this->db->query("select p.NAME, ss.NAME_ENG from PERSON p join SMALL_SUBJECT ss on ss.SSID=p.SSID ")->result_array();
   }
   public function add_person($req){
-    return $this->db->query("insert into PERSON (SSID,NAME,URL,PROFILE) values ('$req->ssid','$req->name','$req->url_address','$req->profile')")->result();
+    $this->db->query("insert into PERSON (SSID,NAME,PROFILE) values ('$req->ssid','$req->name','$req->profile')");
+    return $this->db->query('select PID as pid, NAME as name from PERSON order by PID desc limit 1')->row();
   }
   public function get_random_ssid(){
     return $this->db->query("select ss.SSID from SMALL_SUBJECT ss where MENU_CHECK=1 and (select count(*) from PERSON p where p.SSID =ss.SSID)>2 order by rand()  limit 1")->row();
   }
   public function get_random_ssid_all(){
-    return $this->db->query("select ss.SSID from SMALL_SUBJECT ss where (select count(*) from PERSON p where p.SSID =ss.SSID)>2 order by rand() limit 1")->row();
+    return $this->db->query("select ss.SSID from SMALL_SUBJECT ss where (select count(*) from PERSON p where p.SSID =ss.SSID)>1 order by rand() limit 1")->row();
   }
   public function get_ssid_info($ssid){
     return $this->db->query("select * from SMALL_SUBJECT where SSID='$ssid'")->row();

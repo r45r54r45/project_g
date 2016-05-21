@@ -7,7 +7,8 @@ class User extends CI_Model{
   }
   public function addUser($req){
     @$loc=mysql_escape_string($req->loc);
-    $this->db->query("insert into USER (NAME,PASSWORD,AGE,SEX,LOC) values ('$req->name',$req->pw,'$req->age','$req->sex','$loc')");
+    @$pw=mysql_escape_string($req->pw);
+    $this->db->query("insert into USER (NAME,PASSWORD,AGE,SEX,LOC) values ('$req->name','$pw','$req->age','$req->sex','$loc')");
     return $this->db->query("select UID from USER order by UID desc limit 1")->row();
   }
   public function isUser($name){
@@ -21,6 +22,9 @@ class User extends CI_Model{
   public function getUser($UID){
     $query=$this->db->query("select * from USER where UID='$UID'");
     return $query->row();
+  }
+  public function exit_user($uid){
+    $this->db->query("update USER set QUIT=1 where UID='$uid' ");
   }
 
 }

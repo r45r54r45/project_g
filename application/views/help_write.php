@@ -1,12 +1,16 @@
-<div class="container" >
+<div class="container" ng-controller="help_write">
   <div class="page-header">
-    <h1>건의사항</h1>
+    <h1>새 건의사항</h1>
   </div>
   <div class="row">
     <div class="col-xs-12">
       <div class="input-group"  style="margin-bottom:10px;">
         <span class="input-group-addon">제목</span>
-        <input type="text" class="form-control" name="title">
+        <input type="text" class="form-control" name="title" ng-model="help.TITLE">
+      </div>
+      <div class="input-group"  style="margin-bottom:10px;">
+        <span class="input-group-addon">비밀번호</span>
+        <input type="password" class="form-control" name="title" placeholder="답변을 확인할 비밀번호를 입력해주세요" ng-model="help.PASSWORD">
       </div>
       <div id="help"></div>
       <script>
@@ -17,16 +21,16 @@
       });
       </script>
 
-      <div class="input-group">
+      <!-- <div class="input-group">
         <span class="input-group-btn">
           <span class="btn btn-primary btn-file">
             첨부파일 <input type="file" name="file">
           </span>
         </span>
         <input type="text" class="form-control" readonly>
-      </div>
+      </div> -->
 
-      <button class="btn btn-block btn-default"  style="margin-top:10px;">제출</button>
+      <button class="btn btn-block btn-default"  style="margin-top:10px;" ng-click="send()">제출</button>
 
     </div>
   </div>

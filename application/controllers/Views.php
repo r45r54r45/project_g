@@ -49,6 +49,9 @@ class Views extends CI_Controller {
 	}
 	public function admin()
 	{
+		if(!$this->session->admin){
+			redirect("/");
+		}
 		$this->load->view('header');
 		$this->load->view('admin/admin');
 	}

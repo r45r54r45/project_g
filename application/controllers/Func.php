@@ -30,7 +30,28 @@ class Func extends CI_Controller {
 		$this->load->model('user');
 		$data=$this->user->getUser($UID);
 		$this->session->set_userdata("name",$data->NAME);
+
+		if($data->NAME=="admin"){
+			$this->session->set_userdata("admin","admin");
+		}
 		redirect('/');
+	}
+	public function exit_user($uid){
+		$this->load->model('user');
+		$this->user->exit_user($uid);
+		$this->session->unset_userdata("uid");
+		$this->session->unset_userdata("name");
+		$this->session->sess_destroy();
+		redirect('/','refresh');
+	}
+	public function logout_user(){
+		delete_cookie('uid');
+		delete_cookie('admin');
+		delete_cookie('vote_left');
+		$this->session->unset_userdata("uid");
+		$this->session->unset_userdata("name");
+		$this->session->sess_destroy();
+		redirect('/','refresh');
 	}
 	public function add_big_subject($name){
 		$this->load->model('vote');
@@ -44,7 +65,7 @@ class Func extends CI_Controller {
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		$this->load->model('vote');
-		$this->vote->add_person($request);
+		echo json_encode($this->vote->add_person($request));
 	}
 	public function add_notice(){
 		$postdata = file_get_contents("php://input");

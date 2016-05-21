@@ -19,16 +19,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link href="/src/common.css" rel="stylesheet">
-  <!-- <script src="/src/jquery.easy-autocomplete.min.js" charset="utf-8"></script> -->
-  <!-- <link rel="stylesheet" href="/src/easy-autocomplete.min.css"  charset="utf-8"> -->
-  <!-- <link rel="stylesheet" href="/src/easy-autocomplete.themes.min.css"  charset="utf-8"> -->
+
   <link rel="stylesheet" href="/src/animate.css"  charset="utf-8">
   <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script>
   <!-- datatable -->
-  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs-3.3.6/dt-1.10.11/datatables.min.css"/>
-
-  <script type="text/javascript" src="https://cdn.datatables.net/t/bs-3.3.6/dt-1.10.11/datatables.min.js"></script> -->
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" media="screen" title="no title" charset="utf-8">
+<script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js" charset="utf-8"></script>
 
   <!-- AngularJS -->
   <script src="https://code.angularjs.org/1.4.7/angular.min.js"></script>
@@ -47,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <![endif]-->
 </head>
 <body ng-app="app" >
-  <nav ng-controller="nav" role="navigation" class="navbar navbar-default navbar-fixed-top" ng-init="uid='<?if(isset($_SESSION['uid']))echo $_SESSION['uid'];?>';init();">
+  <nav ng-controller="nav" role="navigation" class="navbar navbar-default navbar-fixed-top" ng-init="uid='<?if(isset($_SESSION['uid']))echo $_SESSION['uid'];?>';<?if(isset($_SESSION['admin']))echo "admin='".$_SESSION['admin']."';";?>init();">
     <div class="container">
       <div class="navbar-header pull-left">
         <a href="/" class="navbar-brand">Repute</a>
@@ -101,8 +98,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       <div class="pull-left">가입일</div>
                       <div class="pull-right">{{userTime|date:'yy년 MM월 dd일'}}</div>
                     </li>
-                    <li class="list-group-item no-border">
+                    <?if(!isset($_SESSION['admin'])){?>
+                    <li class="list-group-item no-border" style="    height: 54px;">
                       <div class="btn btn-default btn-block" ng-click="getOut()">탈퇴하기</div>
+                    </li>
+                    <?}?>
+                    <li class="list-group-item no-border">
+                      <div class="btn btn-default btn-block" ng-click="LogOut()">로그아웃</div>
                     </li>
                   </ul>
 
@@ -116,7 +118,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <span class="badge" id="alarm-badge" ng-show="alarm.length!=0">{{alarm.length}}</span>
                   </div>
                 </a>
-                <ul class="list-group dropdown-menu " style="    width: 250px;    padding-bottom: 9px;
+                <ul class="list-group dropdown-menu " style="    max-height: 300px;
+    overflow-y: scroll;    width: 250px;    padding-bottom: 9px;
                 padding-top: 9px;" ng-show="alarm.length!=0">
                 <!-- alert 메세지 리스트 나오는 부분 -->
                 <li class="" ng-repeat="ala in alarm">
@@ -158,6 +161,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="visible-xs-block clearfix"></div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a>
+              <span>투표권:</span> <span ng-bind="vote_left"></span> <span>개</span>
+            </a>
+            </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">투표</a>
               <ul class="dropdown-menu">

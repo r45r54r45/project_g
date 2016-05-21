@@ -60,6 +60,7 @@ $route['ranking/field'] = 'views/ranking_sitemap';
 $route['ranking/(:any)'] = 'views/ranking_small/$1';
 $route['sitemap'] = 'views/sitemap';
 $route['admin'] = 'views/admin';
+$route['write'] = 'views/help_write';
 $route['data/(:any)'] = 'data/$1';
 $route['data/(:any)/(:any)'] = 'data/$1/$2';
 $route['data/(:any)/(:any)/(:any)'] = 'data/$1/$2/$3';

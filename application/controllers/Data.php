@@ -23,6 +23,10 @@ class Data extends CI_Controller {
 		$this->load->model('vote');
 		echo json_encode($this->vote->get_people($ssid));
 	}
+	public function get_people_pid($ssid){
+		$this->load->model('vote');
+		echo json_encode($this->vote->get_people_pid($ssid));
+	}
 	public function get_all_people_name(){
 		$this->load->model('vote');
 		echo json_encode($this->vote->get_all_people_name());
@@ -122,5 +126,59 @@ class Data extends CI_Controller {
 	public function get_user_by_rid($rid){
 		$this->load->model('gdata');
 		echo json_encode($this->gdata->get_user_by_rid($rid));
+	}
+	public function add_help(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('gdata');
+		$this->gdata->add_help($req);
+	}
+	public function add_response(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('gdata');
+		$this->gdata->add_response($req);
+	}
+	public function get_help(){
+		$this->load->model('gdata');
+		$data['data']=$this->gdata->get_help();
+		echo json_encode($data);
+	}
+	public function remove_person($pid){
+
+	}
+	public function reset_person($pid){
+		$this->load->model('gdata');
+		$this->gdata->reset_person($pid);
+	}
+	public function edit_ss(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('gdata');
+		$this->gdata->edit_ss($req);
+	}
+	public function edit_bs(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('gdata');
+		$this->gdata->edit_bs($req);
+	}
+	public function edit_person(){
+		$postdata = file_get_contents("php://input");
+		$req = json_decode($postdata);
+		$this->load->model('gdata');
+		$this->gdata->edit_person($req);
+	}
+	public function delete_person($pid){
+		$this->load->model('gdata');
+		$this->gdata->delete_person($pid);
+	}
+	public function get_recent_reply_by_ssid($ssid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_recent_reply_by_ssid($ssid));
+	}
+	public function get_ssinfo_with_rid($rid){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_ssinfo_with_rid($rid));
 	}
 }
