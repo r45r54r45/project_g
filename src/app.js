@@ -1622,7 +1622,7 @@ $scope.LogOut=function(){
       return point+sendPoint;
     });
     ref.child($scope.heartModal.pid).child("giveCount").transaction(function(point) {
-      return point+sendPoint;
+      return point+1;
     });
     var data={
       "uid":$cookies.get("uid"),
@@ -1663,7 +1663,7 @@ $scope.LogOut=function(){
       return point-sendPoint;
     });
     ref.child($scope.XModal.pid).child("giveCount").transaction(function(point) {
-      return point-sendPoint;
+      return point+1;
     });
     var data={
       "uid":$cookies.get("uid"),
