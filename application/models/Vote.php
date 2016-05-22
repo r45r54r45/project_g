@@ -23,19 +23,19 @@ class Vote extends CI_Model{
     $this->db->query("insert into SMALL_SUBJECT (BSID,NAME_KOR,NAME_ENG,MENU_CHECK) values  ($bsid,'$name_kor','$name_eng',$check)");
   }
   public function get_big_subjects(){
-    return $this->db->query("select * from BIG_SUBJECT order by ORDERING")->result();
+    return $this->db->query("select * from BIG_SUBJECT order by ORDERING")->result_array();
   }
   public function get_small_subjects($bsid){
-    return $this->db->query("select * from SMALL_SUBJECT where BSID='$bsid' order by ORDERING")->result();
+    return $this->db->query("select * from SMALL_SUBJECT where BSID='$bsid' order by ORDERING")->result_array();
   }
   public function get_vote_menu(){
-    return $this->db->query("select * from SMALL_SUBJECT ss where (select count(*) from PERSON p where p.SSID =ss.SSID)>1 and MENU_CHECK='1' ")->result();
+    return $this->db->query("select * from SMALL_SUBJECT ss where (select count(*) from PERSON p where p.SSID =ss.SSID)>1 and MENU_CHECK='1' ")->result_array();
   }
   public function get_people($ssid){
-    return $this->db->query("select PID,SSID,NAME,PROFILE from PERSON where SSID='$ssid'")->result();
+    return $this->db->query("select PID,SSID,NAME,PROFILE from PERSON where SSID='$ssid'")->result_array();
   }
   public function get_people_pid($ssid){
-    return $this->db->query("select PID as pid from PERSON where SSID='$ssid'")->result();
+    return $this->db->query("select PID as pid from PERSON where SSID='$ssid'")->result_array();
   }
   public function get_all_people_name(){
     return $this->db->query("select p.NAME, ss.NAME_ENG from PERSON p join SMALL_SUBJECT ss on ss.SSID=p.SSID ")->result_array();
