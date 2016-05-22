@@ -119,6 +119,8 @@ app
         $('#test').autocomplete({
           source: $scope.hint,
           select: function (event, ui) {
+            console.log(event);
+            console.log(ui);
             //아이템 선택시 처리 코드
             var result=$.grep($scope.hintArr, function(e){ return e.NAME == ui.item.value; });
             if (result.length == 0) {
@@ -127,6 +129,10 @@ app
           } else {
             // multiple items found
           }
+        },
+        search: function( event, ui ) {
+          console.log(event);
+          console.log(ui);
         },
         selectFirst: true,
         minLength: 1,
@@ -271,7 +277,8 @@ $scope.LogOut=function(){
             win: 0,
             total:0,
             heart:0,
-            x:0
+            x:0,
+            giveCount:0
           });
           $http.get("/data/reset_person/"+pid);
         }
@@ -290,6 +297,22 @@ $scope.LogOut=function(){
 
     alert('수정되었습니다');
     location.reload();
+  }
+  $scope.bs_order_edit=function(bs){
+    var result;
+    if(result=prompt('순서를 입력해주세요')){
+      $http.get("/data/change_order_bs/"+bs.BSID+"/"+result).then(function(res){
+        location.reload();
+      });
+    }
+  }
+  $scope.ss_order_edit=function(ss){
+    var result;
+    if(result=prompt('순서를 입력해주세요')){
+      $http.get("/data/change_order_ss/"+ss.SSID+"/"+result).then(function(res){
+        location.reload();
+      });
+    }
   }
   $scope.delete_person=function(person){
     $http.get("/data/delete_person/"+person.PID);
@@ -437,7 +460,8 @@ $scope.LogOut=function(){
             x:0,
             name:name,
             total:0,
-            url: fr.result
+            url: fr.result,
+            giveCount:0
           });
           render_person();
         });
@@ -450,6 +474,69 @@ $scope.LogOut=function(){
     $scope.person_modal={};
   }
   render_big_subject();
+})
+.controller("admin.user",function($scope,$http){
+  $scope.userdataButton=true;
+  $scope.table;
+  $scope.get_user_data=function(){
+    $scope.userdataButton=false;
+    $scope.table=$('#user_table').DataTable({
+      "ajax": '/data/get_all_user',
+      "columns": [
+        { "data": "NAME" },
+        { "data": "VOTE_POINT" },
+        { "data": "LEVEL_POINT" },
+        { "data": "LEVEL" }
+      ]
+    });
+    $('#user_table tbody').on('click', 'tr', function () {
+      var datas=$scope.table.row(this).data();
+      console.log(data);
+      var ref = new Firebase("https://projectg2016.firebaseio.com/user");
+      var vote_p,level_p;
+      if(vote_p=prompt('변경할 투표 포인트를 입력해주세요','변경 안하려면 -1을 입력해주세요')){
+
+      }else{
+        return;
+      }
+      if(level_p=prompt('변경할 레벨 포인트를 입력해주세요','변경 안하려면 -1을 입력해주세요')){
+
+      }else{
+        return;
+      }
+      var data={};
+      if(level_p!="-1"){
+        data.level_point=parseInt(level_p);
+      }
+      if(vote_p!="-1"){
+        data.vote_point=parseInt(vote_p);
+      }
+      ref.child(datas.UID).update(data);
+      alert('변경되었습니다.');
+    });
+  }
+
+})
+.controller("admin.reply",function($scope,$http){
+  $scope.replydataButton=true;
+  $scope.table;
+  $scope.get_reply_data=function(){
+    $scope.replydataButton=false;
+    $scope.table=$('#reply_table').DataTable({
+      "ajax": '/data/get_all_reply',
+      "columns": [
+        { "data": "ss_kor" },
+        { "data": "user_name" },
+        { "data": "reply_data" }
+      ]
+    });
+    $('#reply_table tbody').on('click', 'tr', function () {
+      var data=$scope.table.row(this).data();
+      console.log(data);
+      location.href="/"+data.ss_eng+"/"+data.p_name;
+    });
+  }
+
 })
 .controller("admin.notice",function($scope,$http){
   $scope.addNotice=function(notice){
@@ -1129,6 +1216,9 @@ $scope.LogOut=function(){
     ref.child($scope.heartModal.pid).child("total").transaction(function(point) {
       return point+sendPoint;
     });
+    ref.child($scope.heartModal.pid).child("giveCount").transaction(function(point) {
+      return point+1;
+    });
     var data={
       "uid":$cookies.get("uid"),
       "pid":$scope.heartModal.pid,
@@ -1165,6 +1255,9 @@ $scope.LogOut=function(){
     });
     ref.child($scope.XModal.pid).child("total").transaction(function(point) {
       return point+sendPoint;
+    });
+    ref.child($scope.XModal.pid).child("giveCount").transaction(function(point) {
+      return point+1;
     });
     var data={
       "uid":$cookies.get("uid"),
@@ -1361,7 +1454,14 @@ $scope.LogOut=function(){
         $scope.bestReplies[i].data=$firebaseObject(ref.child($scope.pid).child(res.data[i].RID));
       }
     });
-
+    //지역 목록 가져오기
+    $http.get("/data/get_loc").then(function(res){
+      $scope.locList=res.data;
+    });
+    //읽을 수 있는 것 없는 것 판별
+    if($cookies.get('uid')){
+      $scope.isLoginedUser=true;
+    }
     // 일댓불러오기
     normalReply(15,0);
   }
@@ -1378,9 +1478,17 @@ $scope.LogOut=function(){
       renderWinLose(parseInt(res.data.win),parseInt(res.data.lose));
     });
   }
-  var level=3; //임시 레벨
+  var level;
+  var levelFind=function(){
+    //레벨 가져오는거
+    var ref = new Firebase("https://projectg2016.firebaseio.com/user").child($cookies.get('uid')).child("level_point").once("value",function(res){
+      level=levelService.findLevel(res.val());
+    });
+  }
+  if($cookies.get('uid')){
+    levelFind();
+  }
   var levelCheck=function(){
-    //TODO 레벨 가져오는거 구현 필요
     if(level<2){
       alert('레벨 2 이상의 회원만 열람가능합니다.');
       return false;
@@ -1512,6 +1620,9 @@ $scope.LogOut=function(){
     ref.child($scope.heartModal.pid).child("total").transaction(function(point) {
       return point+sendPoint;
     });
+    ref.child($scope.heartModal.pid).child("giveCount").transaction(function(point) {
+      return point+sendPoint;
+    });
     var data={
       "uid":$cookies.get("uid"),
       "pid":$scope.heartModal.pid,
@@ -1548,6 +1659,9 @@ $scope.LogOut=function(){
       return point+sendPoint;
     });
     ref.child($scope.XModal.pid).child("total").transaction(function(point) {
+      return point-sendPoint;
+    });
+    ref.child($scope.XModal.pid).child("giveCount").transaction(function(point) {
       return point-sendPoint;
     });
     var data={

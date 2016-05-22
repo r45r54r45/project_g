@@ -25,6 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $config['base_url'] = 'http://sharebooks.kr/';
 //http://localhost:8000/
+//http://sharebooks.kr/
 /*
 |--------------------------------------------------------------------------
 | Index File

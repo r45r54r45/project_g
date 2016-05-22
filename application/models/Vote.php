@@ -23,13 +23,13 @@ class Vote extends CI_Model{
     $this->db->query("insert into SMALL_SUBJECT (BSID,NAME_KOR,NAME_ENG,MENU_CHECK) values  ($bsid,'$name_kor','$name_eng',$check)");
   }
   public function get_big_subjects(){
-    return $this->db->query("select * from BIG_SUBJECT")->result();
+    return $this->db->query("select * from BIG_SUBJECT order by ORDERING")->result();
   }
   public function get_small_subjects($bsid){
-    return $this->db->query("select * from SMALL_SUBJECT where BSID='$bsid'")->result();
+    return $this->db->query("select * from SMALL_SUBJECT where BSID='$bsid' order by ORDERING")->result();
   }
   public function get_vote_menu(){
-    return $this->db->query("select * from SMALL_SUBJECT ss where (select count(*) from PERSON p where p.SSID =ss.SSID)>2 and MENU_CHECK='1' ")->result();
+    return $this->db->query("select * from SMALL_SUBJECT ss where (select count(*) from PERSON p where p.SSID =ss.SSID)>1 and MENU_CHECK='1' ")->result();
   }
   public function get_people($ssid){
     return $this->db->query("select PID,SSID,NAME,PROFILE from PERSON where SSID='$ssid'")->result();
@@ -101,7 +101,8 @@ class Vote extends CI_Model{
     return $this->db->query("select count(*)+1 as total_rank, (select count(*)+1 as ss_rank from PERSON where (select TOTAL from PERSON where PID = '$pid')<TOTAL and SSID=(select SSID from PERSON where PID = '$pid')) as ss_rank from PERSON where (select TOTAL from PERSON where PID = '$pid')<TOTAL")->row();
   }
   public function get_stat_by_info($req){
-    return $this->db->query("select count(*) as win, (select count(*) from (select PID1,PID2,RESULT from VOTE_RESULT vr join USER u on vr.UID=u.UID where u.AGE like '%$req->age%' and u.SEX like '%$req->sex%' and u.LOC like '%$req->loc%' and vr.UID!='0') vr2 where (vr2.PID1='$req->pid' or vr2.PID2='$req->pid') and vr2.RESULT!='$req->pid') as lose from (select PID1, PID2, RESULT from VOTE_RESULT vr join USER u on vr.UID=u.UID where u.AGE like '%$req->age%' and u.SEX like '%$req->sex%' and u.LOC like '%$req->loc%' and vr.UID!='0') vr2 where (vr2.PID1='$req->pid' and vr2.RESULT='$req->pid') or (vr2.PID2='$req->pid' and  vr2.RESULT='$req->pid')")->row();
+    @$loc=mysql_escape_string($req->loc);
+    return $this->db->query("select count(*) as win, (select count(*) from (select PID1,PID2,RESULT from VOTE_RESULT vr join USER u on vr.UID=u.UID where u.AGE like '%$req->age%' and u.SEX like '%$req->sex%' and u.LOC like '%$loc%' and vr.UID!='0') vr2 where (vr2.PID1='$req->pid' or vr2.PID2='$req->pid') and vr2.RESULT!='$req->pid') as lose from (select PID1, PID2, RESULT from VOTE_RESULT vr join USER u on vr.UID=u.UID where u.AGE like '%$req->age%' and u.SEX like '%$req->sex%' and u.LOC like '%$loc%' and vr.UID!='0') vr2 where (vr2.PID1='$req->pid' and vr2.RESULT='$req->pid') or (vr2.PID2='$req->pid' and  vr2.RESULT='$req->pid')")->row();
   }
 
 }

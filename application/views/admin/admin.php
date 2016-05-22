@@ -28,9 +28,14 @@
                 <a href="#" class="list-group-item disabled text-center">
                   대주제
                 </a>
-                <li class="list-group-item" ng-repeat="bs in big_subjects"><a ng-click="bs_select(bs)" >{{bs.NAME}}</a><a ng-click="bs_edit(bs)"><button class="label label-warning pull-right">수정
-                </button></li>
-              </a>
+                <li class="list-group-item" ng-repeat="bs in big_subjects"><a ng-click="bs_select(bs)" >{{bs.NAME}} (순서:{{bs.ORDERING}})</a><a ng-click="bs_edit(bs)"><button class="label label-warning pull-right">수정
+                </button>
+                </a>
+                <a ng-click="bs_order_edit(bs)"><button class="label label-info pull-right">순서 수정
+                </button>
+                </a>
+              </li>
+
               <li class="list-group-item">
                 <div class="input-group">
                   <input type="text" class="form-control" ng-model="big_subject">
@@ -48,9 +53,12 @@
               </a>
 
               <li class="list-group-item" ng-repeat="ss in small_subjects">
-                <a ng-click="ss_select(ss)">{{ss.NAME_KOR}}</a><a ng-click="ss_reset(ss)"><span class="label label-danger pull-right">초기화
+                <a ng-click="ss_select(ss)">{{ss.NAME_KOR}} (순서:{{ss.ORDERING}})</a><a ng-click="ss_reset(ss)"><span class="label label-danger pull-right">초기화
                 </span></a><a ng-click="ss_edit(ss)"><span class="label label-warning pull-right">수정
                 </span></a>
+                <a ng-click="ss_order_edit(ss)"><span class="label label-info pull-right">순서 수정
+                </span>
+                </a>
               </li>
 
 
@@ -126,7 +134,7 @@
                 <div class="modal-body">
                   <h4><span class="label label-default">인물 이름</span></h4>
                   <div class="input-group">
-                    <input type="text" class="form-control" ng-model="person_modal.name">
+                    <input type="text" class="form-control" ng-model="person_modal.name" id="person_modal_name">
                   </div>
                   <h4><span class="label label-default">프로필 내용</span></h4>
                   <div id="profile"></div>
@@ -178,80 +186,47 @@
 </div>
 </div> -->
 
-<div class="row" id="user">
+<div class="row" id="user" ng-controller="admin.user">
   <div class="col-xs-12">
     <blockquote>
       <strong>회원 관리</strong>
+      <button ng-click="get_user_data()" ng-show="userdataButton">데이터 가져오기</button>
     </blockquote>
   </div>
   <div class="col-xs-12">
     <div class="well">
-      <table class="table user_table">
+      <table class="table user_table" id="user_table">
         <thead>
           <tr>
             <th>닉네임</th>
             <th>투표 p</th>
             <th>레벨 p</th>
             <th>레벨</th>
-            <th>수정</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>홍길동</td>
-            <td>1234</td>
-            <td>1234</td>
-            <td>12</td>
-            <td>
-              <button class="btn">수정</button>
-            </td>
-          </tr>
-        </tbody>
       </table>
-      <script>
-      $(document).ready(function(){
-        $('.user_table').DataTable();
-      });
-      </script>
     </div>
   </div>
 </div>
 
-<div class="row" id="reply">
+<div class="row" id="reply" ng-controller="admin.reply">
   <div class="col-xs-12">
     <blockquote>
       <strong>리플 보기</strong>
+      <button ng-click="get_reply_data()" ng-show="replydataButton">데이터 가져오기</button>
     </blockquote>
   </div>
   <div class="col-xs-12">
     <div class="well">
-      <table class="table reply_table">
+      <table class="table reply_table"  id="reply_table">
         <thead>
           <tr>
             <th>소주제</th>
             <th>닉네임</th>
             <th>리플내용</th>
-            <th>이동</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>홍길동</td>
-            <td>1234</td>
-            <td>1234</td>
-            <td>
-              <button class="btn">이동</button>
-            </td>
-          </tr>
-        </tbody>
       </table>
-      <script>
-      $(document).ready(function(){
-        $('.reply_table').DataTable({
-          ordering:  false
-        });
-      });
-      </script>
     </div>
   </div>
 </div>

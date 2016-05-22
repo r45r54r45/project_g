@@ -6,7 +6,7 @@
 }
 </style>
 <div id="loading"></div>
-<div class="container" style="margin-top:20px;" ng-controller="person" ng-init="pid=<?=$pid?>;userAssess_auth=false; init();">
+<div class="container" style="margin-top:20px;" ng-controller="person" ng-init="pid=<?=$pid?>;userAssess_auth=false; isLoginedUser=false; init();">
   <div class="row">
     <div class="col-sm-3 col-xs-12" class="profile_image_div">
       <img ng-src="{{personInfo.url}}" class="img img-responsive img-thumbnail" style="width: 100%;">
@@ -47,8 +47,8 @@
               <h3 class="panel-title">총점</h3>
             </div>
             <div class="panel-body">
-              {{personInfo.total}} p
-              <!-- <div class="alert alert-info" role="alert" >회원에게만 공개됩니다</div> -->
+              <span  ng-show="isLoginedUser">{{personInfo.total}} p</span>
+              <div class="alert alert-info" role="alert"  ng-show="!isLoginedUser">회원에게만 공개됩니다</div>
             </div>
           </div>
         </div>
@@ -59,9 +59,11 @@
               <h3 class="panel-title">승패</h3>
             </div>
             <div class="panel-body">
+              <span  ng-show="isLoginedUser">
               {{personInfo.win}}승 / {{personInfo.lose}}패
+            </span>
 
-              <!-- <div class="alert alert-info" role="alert">회원에게만 공개됩니다</div> -->
+              <div class="alert alert-info" role="alert" ng-show="!isLoginedUser">회원에게만 공개됩니다</div>
             </div>
           </div>
         </div>
@@ -69,7 +71,7 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <span class="panel-title">통계</span>
-              <div class="btn-group" role="group" aria-label="..." style="margin-top: -4px;">
+              <div class="btn-group" role="group" aria-label="..." style="margin-top: -4px;" ng-show="isLoginedUser">
                 <div class="btn-group" role="group">
                   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="    padding: 0px 12px;">
                     성별
@@ -102,19 +104,18 @@
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                     <li><a ng-click="selectLoc('')">전체</a></li>
-                    <li><a ng-click="selectLoc('지역1')">지역1</a></li>
-                    <li><a ng-click="selectLoc('지역2')">지역2</a></li>
+                    <li ng-repeat="loc in locList"><a ng-click="selectLoc(loc.name)">{{loc.name}}</a></li>
                   </ul>
                 </div>
               </div>
             </div>
             <div class="panel-body" style="padding-top:5px;">
-              <span class="label label-primary" ng-show="wholeFlag">전체</span>
+              <span class="label label-primary" ng-show="wholeFlag&&isLoginedUser" >전체</span>
               <span class="label label-primary" ng-bind="statData.sex"></span>
               <span class="label label-primary" ng-bind="statData.age"></span>
               <span class="label label-primary" ng-bind="statData.loc"></span>
 
-              <div class="winlose" ng-show="!dataLoss"  style="margin-top:10px;  background: -webkit-linear-gradient(left, #ff5e3a 0%,#ff5e3a {{WinLose.winPercent}}%,#34aadc {{WinLose.winPercent}}%,#34aadc 100%);
+              <div class="winlose" ng-show="!dataLoss&&isLoginedUser"  style="margin-top:10px;  background: -webkit-linear-gradient(left, #ff5e3a 0%,#ff5e3a {{WinLose.winPercent}}%,#34aadc {{WinLose.winPercent}}%,#34aadc 100%);
               background: linear-gradient(to right, #ff5e3a 0%,#ff5e3a {{WinLose.winPercent}}%,#34aadc {{WinLose.winPercent}}%,#34aadc 100%);">
               <div class="pull-left c_wl">
                 승 {{WinLose.winPercent}}%
@@ -123,14 +124,17 @@
                 패 {{WinLose.losePercent}}%
               </div>
             </div>
-            <div class="alert alert-warning" ng-show="dataLoss">데이터가 존재하지 않습니다</div>
+            <div class="alert alert-warning" ng-show="dataLoss&&isLoginedUser">데이터가 존재하지 않습니다</div>
+            <div class="alert alert-info" role="alert"  ng-show="!isLoginedUser">회원에게만 공개됩니다</div>
           </div>
         </div>
       </div>
       <div class="col-xs-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">프로필 <i class="glyphicon glyphicon-heart c_gly"    ng-click="giveHeart(pid)"></i>{{personInfo.heart}} <i class="glyphicon glyphicon-remove c_gly" ng-click="giveX(pid)" ></i>{{personInfo.x}}</h3>
+            <h3 class="panel-title">프로필 <i class="glyphicon glyphicon-heart c_gly"    ng-click="giveHeart(pid)"></i>{{personInfo.heart}} <i class="glyphicon glyphicon-remove c_gly" ng-click="giveX(pid)" ></i>{{personInfo.x}}
+             기부 횟수: {{personInfo.giveCount}}</h3>
+
           </div>
           <div class="panel-body" id="profile_body">
 

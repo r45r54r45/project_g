@@ -71,4 +71,22 @@ class Gdata extends CI_Model{
     where r.RID='$rid'
     limit 1")->row();
   }
+  public function get_loc(){
+    return $this->db->query("select distinct LOC as name from USER")->result_array();
+  }
+  public function change_order_ss($ssid,$order){
+    return $this->db->query("update SMALL_SUBJECT set ORDERING='$order' where SSID='$ssid'");
+  }
+  public function change_order_bs($bsid,$order){
+    return $this->db->query("update BIG_SUBJECT set ORDERING='$order' where BSID='$bsid'");
+  }
+  public function get_all_reply(){
+    return $this->db->query("select ss.NAME_KOR as ss_kor, u.NAME as user_name, ss.NAME_ENG as ss_eng,p.NAME as p_name, r.RID as rid, r.PID as pid from REPLY r
+    join PERSON p on r.PID=p.PID
+    join SMALL_SUBJECT ss on p.SSID=ss.SSID
+    join USER u on u.UID=r.UID
+    where r.PRID='0'
+    ")->result_array();
+  }
+
   }

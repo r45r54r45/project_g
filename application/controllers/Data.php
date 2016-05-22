@@ -181,4 +181,77 @@ class Data extends CI_Controller {
 		$this->load->model('gdata');
 		echo json_encode($this->gdata->get_ssinfo_with_rid($rid));
 	}
+	public function get_loc(){
+		$this->load->model('gdata');
+		echo json_encode($this->gdata->get_loc());
+	}
+	public function change_order_ss($ssid,$order){
+		$this->load->model('gdata');
+		$this->gdata->change_order_ss($ssid,$order);
+	}
+	public function change_order_bs($bsid,$order){
+		$this->load->model('gdata');
+		$this->gdata->change_order_bs($bsid,$order);
+	}
+	public function get_all_reply(){
+		$this->load->model('gdata');
+		$res=$this->gdata->get_all_reply();
+		$params = array('baseURI' => 'https://projectg2016.firebaseio.com/', 'token' => 'kKe9WUIprBBZrkacyQ2hfRn7hAre8ZH9Svd0Brym');
+		$this->load->library('firebaseLib',$params);
+
+		for($i=0; $i<count($res); $i++){
+			$res[$i]['reply_data']=$this->firebaselib->get("/reply/".$res[$i]['pid']."/".$res[$i]['rid']."/data");
+		}
+
+		$result=[];
+		$result['data']=$res;
+		echo json_encode($result);
+	}
+	public function get_all_user(){
+		$this->load->model('user');
+		$params = array('baseURI' => 'https://projectg2016.firebaseio.com/', 'token' => 'kKe9WUIprBBZrkacyQ2hfRn7hAre8ZH9Svd0Brym');
+		$this->load->library('firebaseLib',$params);
+		$res=$this->user->get_all_user();
+		$level_array=array(100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3300,3600,3900,4200,4500,4800,5100,5400,5700,6000,6400,6800,7200,7600,8000,8400,8800,9200,9600,10000,10500,11000,11500,12000,12500,13000,13500,14000,14500,15000,15600,16200,16800,17400,18000,18600,19200,19800,20400,21000,21700,22400,23100,23800,24500,25200,25900,26600,27300,28000,28800,29600,30400,31200,32000,32800,33600,34400,35200,36000,36900,37800,38700,39600,40500,41400,42300,43200,44100,45000,46000,47000,48000,49000,50000,51000,52000,53000,54000);
+
+		for($i=0; $i<count($res); $i++){
+			$res[$i]['VOTE_POINT']=floor($this->firebaselib->get("/user/".$res[$i]['UID']."/vote_point"));
+			$res[$i]['LEVEL_POINT']=floor($this->firebaselib->get("/user/".$res[$i]['UID']."/level_point"));
+			$res[$i]['LEVEL']=array_search($this->findNearest($res[$i]['LEVEL_POINT'],$level_array),$level_array);
+		}
+
+		$result=[];
+		$result['data']=$res;
+		echo json_encode($result);
+	}
+	public function findNearest($number,$Array)
+	{
+    //First check if we have an exact number
+    if(false !== ($exact = array_search($number,$Array)))
+    {
+         return $Array[$exact];
+    }
+
+    //Sort the array
+    // sort($Array);
+
+   //make sure our search is greater then the smallest value
+   if ($number < $Array[0] )
+   {
+       return $Array[0];
+   }
+
+    $closest = $Array[0]; //Set the closest to the lowest number to start
+
+    foreach($Array as $value)
+    {
+        // if(abs($number - $closest) > abs($value - $number))
+				if($number>$closest)
+        {
+            $closest = $value;
+        }
+    }
+
+    return $closest;
+}
 }

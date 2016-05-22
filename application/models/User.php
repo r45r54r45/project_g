@@ -26,5 +26,8 @@ class User extends CI_Model{
   public function exit_user($uid){
     $this->db->query("update USER set QUIT=1 where UID='$uid' ");
   }
-
+  public function get_all_user(){
+    $query=$this->db->query("select * from USER where QUIT='0'");
+    return $query->result_array();
+  }
 }
