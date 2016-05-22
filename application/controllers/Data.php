@@ -203,7 +203,6 @@ class Data extends CI_Controller {
 			$res[$i]['reply_data']=$this->firebaselib->get("/reply/".$res[$i]['pid']."/".$res[$i]['rid']."/data");
 		}
 
-		$result=[];
 		$result['data']=$res;
 		echo json_encode($result);
 	}
@@ -220,7 +219,6 @@ class Data extends CI_Controller {
 			$res[$i]['LEVEL']=array_search($this->findNearest($res[$i]['LEVEL_POINT'],$level_array),$level_array);
 		}
 
-		$result=[];
 		$result['data']=$res;
 		echo json_encode($result);
 	}
