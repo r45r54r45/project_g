@@ -190,6 +190,7 @@ $scope.ng_login=function(){
   // $scope.id $scope.pw
 }
 $http.get("/data/get_vote_menu").then(function(res){
+  console.log(res.data);
   $scope.category=res.data;
 });
 $scope.getOut=function(){
